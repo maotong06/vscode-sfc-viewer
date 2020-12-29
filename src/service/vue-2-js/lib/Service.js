@@ -256,16 +256,6 @@ module.exports = class Service {
       }
     })
 
-    // #2206 If config is merged by merge-webpack, it discards the __ruleNames
-    // information injected by webpack-chain. Restore the info so that
-    // vue inspect works properly.
-    if (config !== original) {
-      cloneRuleNames(
-        config.module && config.module.rules,
-        original.module && original.module.rules
-      )
-    }
-
     // check if the user has manually mutated output.publicPath
     const target = process.env.VUE_CLI_BUILD_TARGET
     if (
@@ -296,6 +286,40 @@ module.exports = class Service {
 
       entryFiles = entryFiles.map(file => path.resolve(this.context, file))
       process.env.VUE_CLI_ENTRY_FILES = JSON.stringify(entryFiles)
+    }
+
+    let entryFileArr = []
+    for (const key in config.entry) {
+      if (Object.hasOwnProperty.call(config.entry, key)) {
+        const iterator = config.entry[key];
+        entryFileArr = entryFileArr.concat(iterator)
+      }
+    }
+    entryFileArr = entryFileArr.map(p => {
+      return `(${p.replace(/^\W+/, '').replaceAll('.', `\\.`)}$)`
+    })
+    let reg = new RegExp(entryFileArr.join('|'))
+    let rules = [
+      {
+        test: /\.vue$/,
+        loader: require.resolve('../runTimeLoader/loaders/vueLoader.js')
+      },
+      {
+        test: reg,
+        loader: require.resolve('../runTimeLoader/loaders/mainJSLoader.js')
+      }
+    ]
+
+
+    // #2206 If config is merged by merge-webpack, it discards the __ruleNames
+    // information injected by webpack-chain. Restore the info so that
+    // vue inspect works properly.
+    config.module.rules = config.module.rules.concat(rules)
+    if (config !== original) {
+      cloneRuleNames(
+        config.module && config.module.rules,
+        original.module && original.module.rules
+      )
     }
 
     return config
