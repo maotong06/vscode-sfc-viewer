@@ -16,9 +16,17 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('vscode-sfc-viewer.helloWorld', async () => {
+	let disposable = vscode.commands.registerCommand('extension.vscode-sfc-viewer.vue2Viewer', async (fileUri) => {
 		if (!(vscode.workspace && vscode.workspace.workspaceFolders)) {
 			throw new Error('未找到工作区文件夹')
+		}
+		let fileFsPath
+		if (fileUri) {
+			fileFsPath = fileUri.fsPath
+		} else if (vscode.window.activeTextEditor?.document.languageId === 'vue') {
+			fileFsPath = vscode.window.activeTextEditor?.document.fileName
+		} else {
+			throw new Error('当前没有打开或指定vue文件')
 		}
 		let serviceDirName = 'vue-2-js';
 		const originServiceDir = vscode.Uri.parse(path.join(context.extensionPath, 'src', 'service', serviceDirName));
@@ -29,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		child = cp.execFile(
 			'node',
-			[`${targetServiceDirPath}/bin/vue-cli-service.js`, 'serve'],
+			[`${targetServiceDirPath}/bin/vue-cli-service.js`, 'serve', '--open'],
 			{ cwd: vscode.workspace.workspaceFolders[0].uri.fsPath },
 			(error: any, stdout: any, stderr: any) => {
 				if (error) {

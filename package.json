@@ -10,16 +10,32 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:vscode-sfc-viewer.helloWorld"
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "vscode-sfc-viewer.helloWorld",
-				"title": "Hello World"
+				"command": "extension.vscode-sfc-viewer.vue2Viewer",
+				"title": "view vue2 sfc"
 			}
-		]
+		],
+		"menus": {
+      "editor/context": [
+        {
+          "command": "extension.vscode-sfc-viewer.vue2Viewer",
+          "group": "myGrp@vueViewer",
+          "when": "resourceLangId == vue"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "extension.vscode-sfc-viewer.vue2Viewer",
+          "group": "navigation@vueViewer2",
+          "when": "resourceLangId == vue"
+        }
+      ]
+    }
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
