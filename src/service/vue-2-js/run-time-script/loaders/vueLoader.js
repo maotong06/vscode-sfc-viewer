@@ -1,4 +1,6 @@
+// 修改入口vue文件，保证css的同时，注入对应标签
 const compiler = require('vue-template-compiler')
+const config = require('../config.js')
 
 module.exports = function (source, map) {
   // console.log('source', this.resourcePath, this, source)
@@ -15,28 +17,29 @@ module.exports = function (source, map) {
   if (tempCompileInfo.ast.children.length >= 1) {
     // 找到子element中开始和结束为止
     let tempStart = Infinity
-    let tempEnd = -1
     tempCompileInfo.ast.children.forEach(ele => {
       if (ele.start < tempStart) {
         tempStart = ele.start
-      }
-      if (ele.end > tempEnd) {
-        tempEnd = ele.end
+        tagName = ele.tag
       }
     })
     start = start + tempStart
-    end = end - (tempCompileInfo.ast.end - tempEnd)
   } else {
     throw new Error()
   }
   const startStr = source.slice(0, start)
   const endStr = source.slice(end)
-  // console.log('slice', startStr,  endStr)
+  const newSourse = `${startStr}
+<${config.sfcTagName} />
+</${tempCompileInfo.ast.tag}>
+${endStr}
+  `
+  console.log('newSourse', newSourse)
   // throw new Error('停止')
 
   this.callback(
       null,
-      source,
+      newSourse,
       map
   )
 }

@@ -302,11 +302,11 @@ module.exports = class Service {
     let rules = [
       {
         test: /\.vue$/,
-        loader: require.resolve('../runTimeLoader/loaders/vueLoader.js')
+        loader: require.resolve('../run-time-script/loaders/vueLoader.js')
       },
       {
         test: reg,
-        loader: require.resolve('../runTimeLoader/loaders/mainJSLoader.js')
+        loader: require.resolve('../run-time-script/loaders/mainJSLoader.js')
       }
     ]
 

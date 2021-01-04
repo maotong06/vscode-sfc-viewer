@@ -20,11 +20,11 @@ export function activate(context: vscode.ExtensionContext) {
 		if (!(vscode.workspace && vscode.workspace.workspaceFolders)) {
 			throw new Error('未找到工作区文件夹')
 		}
-		let fileFsPath
+		let sfcFileFsPath
 		if (fileUri) {
-			fileFsPath = fileUri.fsPath
+			sfcFileFsPath = fileUri.fsPath
 		} else if (vscode.window.activeTextEditor?.document.languageId === 'vue') {
-			fileFsPath = vscode.window.activeTextEditor?.document.fileName
+			sfcFileFsPath = vscode.window.activeTextEditor?.document.fileName
 		} else {
 			throw new Error('当前没有打开或指定vue文件')
 		}
@@ -32,8 +32,17 @@ export function activate(context: vscode.ExtensionContext) {
 		const originServiceDir = vscode.Uri.parse(path.join(context.extensionPath, 'src', 'service', serviceDirName));
 		const targetServiceDir = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, 'node_modules', serviceDirName);
 		const targetServiceDirPath = targetServiceDir.fsPath;
+
 		// 复制启动文件
 		await vscode.workspace.fs.copy(originServiceDir, targetServiceDir, { overwrite: true })
+
+		// 写入目标文件地址
+		const configFileUrl = vscode.Uri.joinPath(targetServiceDir, 'run-time-script', 'config.js')
+		const configContent = Buffer.from(`module.exports = {
+			"sfcTagName": "VscodeSfcViewer",
+			"targetSFCPath": "${sfcFileFsPath}",
+		}`, 'utf8') 
+		await vscode.workspace.fs.writeFile(configFileUrl, configContent);
 
 		child = cp.execFile(
 			'node',
@@ -52,11 +61,11 @@ export function activate(context: vscode.ExtensionContext) {
 				console.log(`stdout: ${data}`);
 			});
 		}
-		if (child && child.stderr) {
-			child.stderr.on('data', (data) => {
-				console.error(`stderr: ${data}`);
-			});
-		}
+		// if (child && child.stderr) {
+		// 	child.stderr.on('data', (data) => {
+		// 		console.error(`stderr: ${data}`);
+		// 	});
+		// }
 		child.on('close', (code) => {
 			console.log(`child process exited with code ${code}`);
 		});
