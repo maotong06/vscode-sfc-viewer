@@ -7,7 +7,7 @@ if (config.isTs) {
 } else {
   parse = require("@babel/parser")
 }
-console.log('config', config)
+// console.log('config', config)
 module.exports = function (source, map) {
   console.log('MainLoader Start')
   try {
@@ -50,7 +50,7 @@ function mainTsParse(source) {
   let vueVeriableEndPosition = 0
 
   let sourseParse = ts.createSourceFile('main.ts', source, ts.ScriptTarget.Latest, true);
-  console.log('sourseParse', sourseParse)
+  // console.log('sourseParse', sourseParse)
   let astBody = sourseParse.statements
 
   astBody.forEach(ast => {

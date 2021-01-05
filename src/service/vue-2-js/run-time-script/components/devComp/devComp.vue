@@ -78,6 +78,7 @@ export default {
 }
 .showBtn {
   position: fixed;
+  z-index: 99999999999;
   bottom: 20px;
   right: 20px;
   width: 40px;
@@ -94,6 +95,7 @@ export default {
 }
 .console_box {
   position: fixed;
+  z-index: 999999999999;
   height: 100vh;
   width: 100vw;
   top: 0;

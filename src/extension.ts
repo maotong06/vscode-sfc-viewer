@@ -75,7 +75,9 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 		if (child && child.stderr) {
 			child.stderr.on('data', (data) => {
-				console.error(`stderr: ${data}`);
+				if (data.indexOf('webpack.Progress') < 0) {
+					console.error(`stderr: ${data}`);
+				}
 			});
 		}
 		child.on('close', (code) => {

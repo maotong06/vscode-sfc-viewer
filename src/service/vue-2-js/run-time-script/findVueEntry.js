@@ -11,7 +11,7 @@ if (config.isTs) {
 }
 
 module.exports = function (mainjsEntryPath) {
-  let jsEntryAbsolutePath = path.join(process.cwd(), mainjsEntryPath)
+  let jsEntryAbsolutePath = mainjsEntryPath.startsWith('/') ? mainjsEntryPath : path.join(process.cwd(), mainjsEntryPath)
   let source = fs.readFileSync(jsEntryAbsolutePath).toString('utf-8')
   if (config.isTs) {
     return findMainTsVueEntry(source)
