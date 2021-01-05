@@ -39,12 +39,21 @@ export function activate(context: vscode.ExtensionContext) {
 		// 写入目标文件地址
 		const configFileUrl = vscode.Uri.joinPath(targetServiceDir, 'run-time-script', 'config.js')
 		const devComponentPath = vscode.Uri.joinPath(targetServiceDir, 'run-time-script', 'components', 'devComp', 'devComp.vue').fsPath
+		const targetPackageJson = JSON.parse((await vscode.workspace.fs.readFile(vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, 'package.json'))).toString())
+		console.log('targetPackageJson', targetPackageJson)
 		const configContent = Buffer.from(`module.exports = {
 			"sfcTagName": "VscodeSfcViewer",
 			"targetSFCPath": "${sfcFileFsPath}",
 			"devComponentPath": "${devComponentPath}",
-			"devComponentTag": "devComp"
+			"devComponentTag": "devComp",
+			"vueVersion": "${targetPackageJson.dependencies.vue ?
+				targetPackageJson.dependencies.vue : targetPackageJson.devDependencies.vue ?
+				targetPackageJson.devDependencies.vue: 2}",
+			"isTs": ${targetPackageJson.dependencies.typescript ?
+				'true': targetPackageJson.devDependencies.typescript ?
+				'true': 'false'}
 		}`, 'utf8') 
+		console.log(configContent)
 		await vscode.workspace.fs.writeFile(configFileUrl, configContent);
 
 		child = cp.execFile(
@@ -64,11 +73,11 @@ export function activate(context: vscode.ExtensionContext) {
 				console.log(`stdout: ${data}`);
 			});
 		}
-		// if (child && child.stderr) {
-		// 	child.stderr.on('data', (data) => {
-		// 		console.error(`stderr: ${data}`);
-		// 	});
-		// }
+		if (child && child.stderr) {
+			child.stderr.on('data', (data) => {
+				console.error(`stderr: ${data}`);
+			});
+		}
 		child.on('close', (code) => {
 			console.log(`child process exited with code ${code}`);
 		});

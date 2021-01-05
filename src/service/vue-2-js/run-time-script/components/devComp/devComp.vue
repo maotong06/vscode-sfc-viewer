@@ -94,8 +94,8 @@ export default {
 }
 .console_box {
   position: fixed;
-  width: 100vh;
-  widows: 100vw;
+  height: 100vh;
+  width: 100vw;
   top: 0;
   left: 0;
 }

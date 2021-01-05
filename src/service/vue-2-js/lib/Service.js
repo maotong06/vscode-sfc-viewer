@@ -10,7 +10,7 @@ const defaultsDeep = require('lodash.defaultsdeep')
 const { chalk, warn, error, isPlugin, resolvePluginId, loadModule, resolvePkg } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
-const findVueEntry = require('./findVueEntry.js')
+const findVueEntry = require('../run-time-script/findVueEntry.js')
 
 module.exports = class Service {
   constructor (context, { plugins, pkg, inlineOptions, useBuiltIn } = {}) {
