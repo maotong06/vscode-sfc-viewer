@@ -3,7 +3,16 @@ const compiler = require('vue-template-compiler')
 const config = require('../config.js')
 
 module.exports = function (source, map) {
-  // console.log('source', this.resourcePath, this, source)
+  // console.log('source', this.resourcePath, config.targetSFCPath)
+  // 跳过对自身的替换
+  if (this.resourcePath === config.targetSFCPath) {
+    this.callback(
+      null,
+      newSourse,
+      map
+    )
+    return 
+  }
   // console.log('compiler', compiler)
   // console.log('parsed', compiler.compile(source, { outputSourceRange: true }))
   const templateInfo = compiler.parseComponent(source, {deindent: false}).template
@@ -35,7 +44,6 @@ module.exports = function (source, map) {
 </${tempCompileInfo.ast.tag}>
 ${endStr}
   `
-  console.log('newSourse', newSourse)
   // throw new Error('停止')
 
   this.callback(

@@ -45,7 +45,6 @@ module.exports = function (source, map) {
 ;Vue.component('${config.sfcTagName}', ()=> import('${config.targetSFCPath}')) // eslint-disable-line
 ;Vue.component('${config.devComponentTag}', ()=> import('${config.devComponentPath}')) // eslint-disable-line
 ${endStr}`
-    console.log('newSourse', newSourse)
 
     // TODO: 查找入口app.vue path
 
