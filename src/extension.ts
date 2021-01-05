@@ -38,9 +38,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 		// 写入目标文件地址
 		const configFileUrl = vscode.Uri.joinPath(targetServiceDir, 'run-time-script', 'config.js')
+		const devComponentPath = vscode.Uri.joinPath(targetServiceDir, 'run-time-script', 'components', 'devComp', 'devComp.vue').fsPath
 		const configContent = Buffer.from(`module.exports = {
 			"sfcTagName": "VscodeSfcViewer",
 			"targetSFCPath": "${sfcFileFsPath}",
+			"devComponentPath": "${devComponentPath}",
+			"devComponentTag": "devComp"
 		}`, 'utf8') 
 		await vscode.workspace.fs.writeFile(configFileUrl, configContent);
 

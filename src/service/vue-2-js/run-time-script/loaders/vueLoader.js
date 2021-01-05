@@ -31,6 +31,7 @@ module.exports = function (source, map) {
   const endStr = source.slice(end)
   const newSourse = `${startStr}
 <${config.sfcTagName} />
+<${config.devComponentTag} />
 </${tempCompileInfo.ast.tag}>
 ${endStr}
   `

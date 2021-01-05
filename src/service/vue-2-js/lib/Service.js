@@ -10,6 +10,7 @@ const defaultsDeep = require('lodash.defaultsdeep')
 const { chalk, warn, error, isPlugin, resolvePluginId, loadModule, resolvePkg } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
+const findVueEntry = require('./findVueEntry.js')
 
 module.exports = class Service {
   constructor (context, { plugins, pkg, inlineOptions, useBuiltIn } = {}) {
@@ -295,17 +296,17 @@ module.exports = class Service {
         entryFileArr = entryFileArr.concat(iterator)
       }
     }
-    entryFileArr = entryFileArr.map(p => {
-      return `(${p.replace(/^\W+/, '').replaceAll('.', `\\.`)}$)`
+    let vueEntrys = []
+    entryFileArr.forEach(e => {
+      vueEntrys = vueEntrys.concat(findVueEntry(e))
     })
-    let reg = new RegExp(entryFileArr.join('|'))
     let rules = [
       {
-        test: /\.vue$/,
+        test: genRegbyStringArr(vueEntrys),
         loader: require.resolve('../run-time-script/loaders/vueLoader.js')
       },
       {
-        test: reg,
+        test: genRegbyStringArr(entryFileArr),
         loader: require.resolve('../run-time-script/loaders/mainJSLoader.js')
       }
     ]
@@ -459,4 +460,11 @@ function cloneRuleNames (to, from) {
       cloneRuleNames(to[i].oneOf, r.oneOf)
     }
   })
+}
+
+function genRegbyStringArr(arr) {
+  let newArr = arr.map(p => {
+    return `(${p.replace(/^\W+/, '').replaceAll('.', `\\.`)}$)`
+  })
+  return new RegExp(newArr.join('|'))
 }

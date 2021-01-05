@@ -43,6 +43,7 @@ module.exports = function (source, map) {
     const endStr = source.slice(vueVeriableEndPosition)
     const newSourse = `${startStr}
 ;Vue.component('${config.sfcTagName}', ()=> import('${config.targetSFCPath}')) // eslint-disable-line
+;Vue.component('${config.devComponentTag}', ()=> import('${config.devComponentPath}')) // eslint-disable-line
 ${endStr}`
     console.log('newSourse', newSourse)
 
