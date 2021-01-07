@@ -56,6 +56,10 @@ export function activate(context: vscode.ExtensionContext) {
 		console.log(configContent)
 		await vscode.workspace.fs.writeFile(configFileUrl, configContent);
 
+		if (child.kill) {
+			child.kill()
+			child = {} as cp.ChildProcess
+		}
 		child = cp.execFile(
 			'node',
 			[`${targetServiceDirPath}/bin/vue-cli-service.js`, 'serve', '--open'],

@@ -25,7 +25,7 @@ module.exports = function(source) {
   }
   const startStr = source.slice(0, createAppPosition)
   const endStr = source.slice(createAppPosition)
-  console.log('createAppPosition', createAppPosition, startStr, endStr)
+  // console.log('createAppPosition', createAppPosition, startStr, endStr)
   return `
 import ${config.sfcTagName} from '${config.targetSFCPath}' // eslint-disable-line
 import ${config.devComponentTag} from '${config.devComponentPath}' // eslint-disable-line
