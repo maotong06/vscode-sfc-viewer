@@ -86,6 +86,11 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	let kill = vscode.commands.registerCommand('extension.vscode-sfc-viewer.killViewer', () => {
+		child.kill()
+	})
+	context.subscriptions.push(kill);
 }
 
 // this method is called when your extension is deactivated

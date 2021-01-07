@@ -33,7 +33,7 @@ module.exports = function (source, map) {
         newSourse = vue2mainJs(source)
       }
     }
-    // console.log('newSourse', newSourse)
+    console.log('newSourse', newSourse)
     this.callback(
       null,
       newSourse,

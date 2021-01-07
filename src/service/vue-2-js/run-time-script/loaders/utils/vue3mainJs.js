@@ -25,6 +25,9 @@ module.exports = function(source) {
         }
     }
   })
+  if (createAppPosition === 0) {
+    throw new Error('未找到createApp执行位置')
+  }
 
   const startStr = source.slice(0, createAppPosition)
   const endStr = source.slice(createAppPosition)

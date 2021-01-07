@@ -18,6 +18,10 @@
 			{
 				"command": "extension.vscode-sfc-viewer.vue2Viewer",
 				"title": "view vue2 sfc"
+			},
+			{
+				"command": "extension.vscode-sfc-viewer.killViewer",
+				"title": "kill sfc cp"
 			}
 		],
 		"menus": {

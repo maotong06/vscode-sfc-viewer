@@ -53,7 +53,7 @@ function findMainTsVueEntry(source) {
   let vueEntrys = []
 
   let sourseParse = ts.createSourceFile('x.ts', source, ts.ScriptTarget.Latest, true);
-  console.log('sourseParse', sourseParse)
+  // console.log('sourseParse', sourseParse)
   let astBody = sourseParse.statements
   
 
