@@ -12,7 +12,7 @@ module.exports = function(source) {
     delintNode(sourceFile);
   
     function delintNode(node) {
-      console.log('delintNode', node, source.slice(node.pos, node.end), node.kind === ts.SyntaxKind.CallExpression, get(node, ['expression', 'escapedText']))
+      // console.log('delintNode', node, source.slice(node.pos, node.end), node.kind === ts.SyntaxKind.CallExpression, get(node, ['expression', 'escapedText']))
       if (node.kind === ts.SyntaxKind.CallExpression &&
         get(node, ['expression', 'escapedText']) === 'createApp') {
         createAppPosition = node.end
