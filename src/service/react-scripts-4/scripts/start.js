@@ -114,6 +114,12 @@ checkBrowsers(paths.appPath, isInteractive)
       errors: errors =>
         devServer.sockWrite(devServer.sockets, 'errors', errors),
     };
+    config.module.rules.push(
+      {
+        test: generaterRegExpByPaths(config.entry),
+        loader: require.resolve('../run-time-script/loaders/mainJsLoader.js')
+      },
+    )
     // Create a webpack compiler that is configured with custom messages.
     const compiler = createCompiler({
       appName,
@@ -180,3 +186,21 @@ checkBrowsers(paths.appPath, isInteractive)
     }
     process.exit(1);
   });
+
+function generaterRegExpByPaths(paths) {
+  if (typeof paths === 'string') {
+    paths = [paths]
+  } else if (Array.isArray(paths)) {
+
+  } else if (typeof paths === 'object') {
+    paths = Object.values(paths)
+  }
+  const cwd = process.cwd()
+  let newArr = paths.map(p => {
+    if (p.startsWith('/')) {
+      p = p.replace(cwd, '')
+    }
+    return `(${p.replace(/^\W+/, '').replaceAll('.', `\\.`)}$)`
+  })
+  return new RegExp(newArr.join('|'))
+}

@@ -3,9 +3,10 @@ import * as path from 'path';
 import * as cp from 'child_process';
 import { SuperViewer } from './super-viewer';
 import { templateRender } from '../utils/templateRender';
+import { getPackageVersion } from '../utils/getPackageVersion';
 
 
-export class VueViewer extends SuperViewer {
+export class ReactViewer extends SuperViewer {
   protected serviceDirName = 'react-scripts-4'
   protected matchLanguageIds = ['jsx', 'javascriptreact', 'typescriptreact']
 
@@ -34,9 +35,8 @@ export class VueViewer extends SuperViewer {
       templateRender(originConfigStr, {
         sfcFileFsPath: this.sfcFileFsPath,
         devComponentPath,
-        isTs: targetPackageJson.dependencies.typescript ?
-        'true': targetPackageJson.devDependencies.typescript ?
-        'true': 'false'})
+        isTs: getPackageVersion(targetPackageJson, 'typescript') ? 'true' : 'false'
+      })
       , 'utf8') 
     console.log(configContent)
     await vscode.workspace.fs.writeFile(targetConfigFileUrl, configContent);

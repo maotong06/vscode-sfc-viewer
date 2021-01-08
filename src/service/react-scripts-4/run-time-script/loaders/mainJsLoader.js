@@ -1,9 +1,9 @@
 const get = require('../utils/get.js')
+const config = require('../config.js')
 
 module.exports = function (source, map) {
   const parser = require("@babel/parser")
   const traverse = require("@babel/traverse")
-  console.log('source', source)
   const sourceParse = parser.parse(source, {
     // parse in strict mode and allow module declarations
     sourceType: "module",
@@ -32,10 +32,14 @@ module.exports = function (source, map) {
   if (!start || !end) {
     throw new Error('未找到 ReactDOM.render 执行位置')
   }
-  console.log('source.slice(path.node.start, path.node.end)', source.slice(start, end))
+  let startStr = source.slice(0, start)
+  let endStr = source.slice(end)
+  let newSource = `import ${config.sfcTagName} from '${config.targetSFCPath}'
+${startStr}<${config.sfcTagName} />${endStr}`
+  console.log('source.slice(path.node.start, path.node.end)', newSource)
   this.callback(
     null,
-    source,
+    newSource,
     map
   )
 }

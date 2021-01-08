@@ -1,3 +1,4 @@
+import { ReactViewer } from './commands/react-viewer';
 import { VueViewer } from './commands/vue-viewer';
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
@@ -10,18 +11,35 @@ let child = {} as cp.ChildProcess
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	let vueViewer = new VueViewer(context)
+	let reactViewer = new ReactViewer(context)
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "vscode-sfc-viewer" is now active!');
 
 	context.subscriptions.push(vscode.commands.registerCommand(
-		'extension.vscode-sfc-viewer.vue2Viewer',
-		vueViewer.openViewer
+		'extension.vscode-sfc-viewer.openVueViewer',
+		async (fileUri) => {
+			vueViewer.openViewer(fileUri)
+		}
 	));
 	context.subscriptions.push(vscode.commands.registerCommand(
-		'extension.vscode-sfc-viewer.killViewer',
-		vueViewer.closeViewer
+		'extension.vscode-sfc-viewer.killVueViewer',
+		() => {
+			vueViewer.closeViewer()
+		}
+	));
+	context.subscriptions.push(vscode.commands.registerCommand(
+		'extension.vscode-sfc-viewer.openReactViewer',
+		async (fileUri) => {
+			reactViewer.openViewer(fileUri)
+		}
+	));
+	context.subscriptions.push(vscode.commands.registerCommand(
+		'extension.vscode-sfc-viewer.killReactViewer',
+		() => {
+			reactViewer.closeViewer()
+		}
 	));
 }
 

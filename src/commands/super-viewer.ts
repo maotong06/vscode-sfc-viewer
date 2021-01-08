@@ -20,7 +20,8 @@ export abstract class SuperViewer {
 
   public closeViewer() {
     if (this.child.kill) {
-      this.child.kill()
+      this.child.kill(0)
+      console.log('已关闭进程')
     }
   }
 

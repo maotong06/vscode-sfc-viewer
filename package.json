@@ -16,27 +16,45 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.vscode-sfc-viewer.vue2Viewer",
-				"title": "view vue2 sfc"
+				"command": "extension.vscode-sfc-viewer.openVueViewer",
+				"title": "view vue sfc"
 			},
 			{
-				"command": "extension.vscode-sfc-viewer.killViewer",
-				"title": "kill sfc cp"
+				"command": "extension.vscode-sfc-viewer.killVueViewer",
+				"title": "kill vue sfc"
+			},
+			{
+				"command": "extension.vscode-sfc-viewer.openReactViewer",
+				"title": "view react sfc"
+			},
+			{
+				"command": "extension.vscode-sfc-viewer.killReactViewer",
+				"title": "kill react sfc"
 			}
 		],
 		"menus": {
       "editor/context": [
         {
-          "command": "extension.vscode-sfc-viewer.vue2Viewer",
-          "group": "myGrp@vueViewer",
+          "command": "extension.vscode-sfc-viewer.openVueViewer",
+          "group": "navigation@vueViewer",
           "when": "resourceLangId == vue"
+        },
+        {
+          "command": "extension.vscode-sfc-viewer.openReactViewer",
+          "group": "navigation@openReactViewer",
+          "when": "resourceLangId == jsx || resourceLangId == javascriptreact || resourceLangId == typescriptreact"
         }
       ],
       "explorer/context": [
         {
-          "command": "extension.vscode-sfc-viewer.vue2Viewer",
-          "group": "navigation@vueViewer2",
+          "command": "extension.vscode-sfc-viewer.openVueViewer",
+          "group": "navigation@vueViewerExplorer",
           "when": "resourceLangId == vue"
+        },
+        {
+          "command": "extension.vscode-sfc-viewer.openReactViewer",
+          "group": "navigation@reactViewerExplorer",
+          "when": "resourceLangId == jsx || resourceLangId == javascriptreact || resourceLangId == typescriptreact"
         }
       ]
     }
