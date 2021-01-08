@@ -19,7 +19,7 @@ export class VueViewer extends SuperViewer {
     } else {
       throw new Error('当前没有打开或指定vue文件')
     }
-    let serviceDirName = 'vue-cli-service';
+    let serviceDirName = 'vue-cli-service-4';
     const originServiceDir = vscode.Uri.parse(path.join(context.extensionPath, 'src', 'service', serviceDirName));
     const targetServiceDir = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, 'node_modules', serviceDirName);
     const targetServiceDirPath = targetServiceDir.fsPath;
