@@ -464,7 +464,7 @@ function cloneRuleNames (to, from) {
 
 function genRegbyStringArr(arr) {
   let newArr = arr.map(p => {
-    return `(${p.replace(/^\W+/, '').replaceAll('.', `\\.`)}$)`
+    return `(${p.replace(/^\W+/, '').replace(/\./g, `\\.`)}$)`
   })
   return new RegExp(newArr.join('|'))
 }

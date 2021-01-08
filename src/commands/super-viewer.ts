@@ -20,31 +20,33 @@ export abstract class SuperViewer {
 
   public closeViewer() {
     if (this.child.kill) {
-      this.child.kill(0)
+      this.child.send({ code: 'close' })
+      this.child.kill()
       console.log('已关闭进程')
     }
   }
 
-  protected runProcess(execArgs: string[]) {
+  protected runProcess(moudulePath: string, execArgs: string[]) {
     if (!vscode.workspace.workspaceFolders) {
       return
     }
     if (this.child.kill) {
+      this.child.send({ code: 'close' })
       this.child.kill()
       console.log('已关闭进程')
       this.child = {} as cp.ChildProcess
     }
-    this.child = cp.execFile(
-      'node',
+    this.child = cp.fork(
+      moudulePath,
       execArgs,
-      { cwd: vscode.workspace.workspaceFolders[0].uri.fsPath },
-      (error: any, stdout: any, stderr: any) => {
-        if (error) {
-          throw error;
-        }
-        console.log(stdout);
-      }
+      {
+        cwd: vscode.workspace.workspaceFolders[0].uri.fsPath,
+        silent: true
+      },
     );
+    this.child.on('message', (msg) => {
+      console.log('msg', msg)
+    })
     // 监听子进程
     if (this.child && this.child.stdout) {
     this.child.stdout.on('data', (data) => {
