@@ -1,10 +1,22 @@
 import * as cp from 'child_process';
 import * as vscode from 'vscode';
+import * as path from 'path'
 
-export class SuperViewer {
-  public child = {} as cp.ChildProcess
-  public execArgs: string[] = []
-  
+export abstract class SuperViewer {
+  protected abstract matchLanguageIds: string[]
+  protected abstract serviceDirName: string
+  protected child = {} as cp.ChildProcess
+  protected sfcFileFsPath: string = ''
+  protected context: vscode.ExtensionContext
+  protected originServiceDir: vscode.Uri = {} as vscode.Uri
+  protected targetServiceDir: vscode.Uri = {} as vscode.Uri
+  protected workspaceFoldersUri: vscode.Uri = {} as vscode.Uri
+
+  public constructor(context: vscode.ExtensionContext) {
+    this.context = context
+  }
+
+  public abstract openViewer(fileUri: vscode.Uri): any
 
   public closeViewer() {
     if (this.child.kill) {
@@ -12,7 +24,7 @@ export class SuperViewer {
     }
   }
 
-  public runProcess() {
+  protected runProcess(execArgs: string[]) {
     if (!vscode.workspace.workspaceFolders) {
       return
     }
@@ -22,7 +34,7 @@ export class SuperViewer {
     }
     this.child = cp.execFile(
       'node',
-      this.execArgs,
+      execArgs,
       { cwd: vscode.workspace.workspaceFolders[0].uri.fsPath },
       (error: any, stdout: any, stderr: any) => {
         if (error) {
@@ -47,5 +59,22 @@ export class SuperViewer {
     this.child.on('close', (code) => {
       console.log(`child process exited with code ${code}`);
     });
+  }
+
+  protected initWorkspaceUri(fileUri: vscode.Uri) {
+    if (!(vscode.workspace && vscode.workspace.workspaceFolders)) {
+      throw new Error('未找到工作区文件夹')
+    }
+    if (fileUri) {
+      this.sfcFileFsPath = fileUri.fsPath
+    } else if (vscode.window.activeTextEditor?.document.languageId && this.matchLanguageIds.includes(vscode.window.activeTextEditor?.document.languageId)) {
+      this.sfcFileFsPath = vscode.window.activeTextEditor?.document.fileName
+    } else {
+      throw new Error('当前没有打开或指定文件')
+    }
+
+    this.workspaceFoldersUri = vscode.workspace.workspaceFolders[0].uri
+    this.originServiceDir = vscode.Uri.parse(path.join(this.context.extensionPath, 'src', 'service', this.serviceDirName));
+    this.targetServiceDir = vscode.Uri.joinPath( this.workspaceFoldersUri, 'node_modules', this.serviceDirName);
   }
 }

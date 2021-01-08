@@ -6,12 +6,13 @@ import { templateRender } from '../utils/templateRender';
 
 
 export class VueViewer extends SuperViewer {
-  protected serviceDirName = 'vue-cli-service-4'
-  protected matchLanguageIds = ['vue']
+  protected serviceDirName = 'react-scripts-4'
+  protected matchLanguageIds = ['jsx', 'javascriptreact', 'typescriptreact']
 
   public constructor(context: vscode.ExtensionContext) {
     super(context)
   }
+  
   public async openViewer(fileUri: vscode.Uri) {
     await this.initWorkspaceUri(fileUri)
     await this.writeFiles()
@@ -33,9 +34,6 @@ export class VueViewer extends SuperViewer {
       templateRender(originConfigStr, {
         sfcFileFsPath: this.sfcFileFsPath,
         devComponentPath,
-        vueVersion: targetPackageJson.dependencies.vue ?
-        targetPackageJson.dependencies.vue : targetPackageJson.devDependencies.vue ?
-        targetPackageJson.devDependencies.vue: 2,
         isTs: targetPackageJson.dependencies.typescript ?
         'true': targetPackageJson.devDependencies.typescript ?
         'true': 'false'})
@@ -43,4 +41,5 @@ export class VueViewer extends SuperViewer {
     console.log(configContent)
     await vscode.workspace.fs.writeFile(targetConfigFileUrl, configContent);
   }
+
 }

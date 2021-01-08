@@ -1,0 +1,7 @@
+module.exports = {
+  "sfcTagName": "VscodeSfcViewer",
+  "targetSFCPath": "{{sfcFileFsPath}}",
+  "devComponentPath": "{{devComponentPath}}",
+  "devComponentTag": "devComp",
+  "isTs": {{isTs}}
+}
