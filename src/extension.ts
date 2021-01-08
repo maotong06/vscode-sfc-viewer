@@ -17,15 +17,11 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(vscode.commands.registerCommand(
 		'extension.vscode-sfc-viewer.vue2Viewer',
-		async (fileUrl) => {
-			await vueViewer.openViewer(fileUrl)
-		}
+		vueViewer.openViewer
 	));
 	context.subscriptions.push(vscode.commands.registerCommand(
 		'extension.vscode-sfc-viewer.killViewer',
-		() => {
-			vueViewer.closeViewer()
-		}
+		vueViewer.closeViewer
 	));
 }
 

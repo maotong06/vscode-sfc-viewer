@@ -16,7 +16,7 @@ export class VueViewer extends SuperViewer {
   public async openViewer(fileUri: vscode.Uri) {
     await this.initWorkspaceUri(fileUri)
     await this.writeFiles()
-    this.runProcess([path.join(this.targetServiceDir.fsPath, 'bin', 'vue-cli-service.js'), 'serve', '--open'])
+    this.runProcess([path.join(this.targetServiceDir.fsPath, 'bin', 'react-scripts.js'), 'start'])
   }
 
   private async writeFiles() {

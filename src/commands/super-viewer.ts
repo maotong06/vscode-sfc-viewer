@@ -30,6 +30,7 @@ export abstract class SuperViewer {
     }
     if (this.child.kill) {
       this.child.kill()
+      console.log('已关闭进程')
       this.child = {} as cp.ChildProcess
     }
     this.child = cp.execFile(
