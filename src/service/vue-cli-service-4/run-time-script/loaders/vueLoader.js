@@ -73,7 +73,7 @@ ${endStr}`
 }
 
 function changeVue3Source(source) {
-  const compiler = require('@vue/compiler-sfc')
+  const compiler = require('./utils/vue3-compiler-sfc/compiler-sfc.js')
   let parseSource = compiler.parse(source, { sourceMap: true })
   let template = parseSource.descriptor.template
   let props = []

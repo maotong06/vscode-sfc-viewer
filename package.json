@@ -36,24 +36,24 @@
       "editor/context": [
         {
           "command": "extension.vscode-sfc-viewer.openVueViewer",
-          "group": "navigation@vueViewer",
+          "group": "2_workspace@vueViewer",
           "when": "resourceLangId == vue"
         },
         {
           "command": "extension.vscode-sfc-viewer.openReactViewer",
-          "group": "navigation@openReactViewer",
+          "group": "2_workspace@openReactViewer",
           "when": "resourceLangId == jsx || resourceLangId == javascriptreact || resourceLangId == typescriptreact"
         }
       ],
       "explorer/context": [
         {
           "command": "extension.vscode-sfc-viewer.openVueViewer",
-          "group": "navigation@vueViewerExplorer",
+          "group": "2_workspace@vueViewerExplorer",
           "when": "resourceLangId == vue"
         },
         {
           "command": "extension.vscode-sfc-viewer.openReactViewer",
-          "group": "navigation@reactViewerExplorer",
+          "group": "2_workspace@reactViewerExplorer",
           "when": "resourceLangId == jsx || resourceLangId == javascriptreact || resourceLangId == typescriptreact"
         }
       ]
