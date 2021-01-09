@@ -39,7 +39,7 @@ module.exports = function (source, map) {
 }
 
 function changeVue2Source(source) {
-  const compiler = require('vue-template-compiler')
+  const compiler = require('./utils/vue-template-compiler/index.js')
   // console.log('compiler', compiler)
   // console.log('parsed', compiler.compile(source, { outputSourceRange: true }))
   const templateInfo = compiler.parseComponent(source, {deindent: false}).template
