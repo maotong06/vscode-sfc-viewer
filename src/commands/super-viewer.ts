@@ -5,6 +5,7 @@ import * as path from 'path'
 export abstract class SuperViewer {
   protected abstract matchLanguageIds: string[]
   protected abstract serviceDirName: string
+  protected abstract nodeModuleDirName: string
   protected child = {} as cp.ChildProcess
   protected sfcFileFsPath: string = ''
   protected context: vscode.ExtensionContext
@@ -79,6 +80,6 @@ export abstract class SuperViewer {
 
     this.workspaceFoldersUri = vscode.workspace.workspaceFolders[0].uri
     this.originServiceDir = vscode.Uri.parse(path.join(this.context.extensionPath, 'src', 'service', this.serviceDirName));
-    this.targetServiceDir = vscode.Uri.joinPath( this.workspaceFoldersUri, 'node_modules', this.serviceDirName);
+    this.targetServiceDir = vscode.Uri.joinPath( this.workspaceFoldersUri, 'node_modules', this.nodeModuleDirName, this.serviceDirName);
   }
 }

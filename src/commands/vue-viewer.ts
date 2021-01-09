@@ -8,6 +8,7 @@ import { getPackageVersion } from '../utils/getPackageVersion';
 
 export class VueViewer extends SuperViewer {
   protected serviceDirName = 'vue-cli-service-4'
+  protected nodeModuleDirName = '@vue/cli-service'
   protected matchLanguageIds = ['vue']
 
   public constructor(context: vscode.ExtensionContext) {

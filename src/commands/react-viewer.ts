@@ -8,6 +8,7 @@ import { getPackageVersion } from '../utils/getPackageVersion';
 
 export class ReactViewer extends SuperViewer {
   protected serviceDirName = 'react-scripts-4'
+  protected nodeModuleDirName = 'react-scripts'
   protected matchLanguageIds = ['jsx', 'javascriptreact', 'typescriptreact']
 
   public constructor(context: vscode.ExtensionContext) {
@@ -17,7 +18,7 @@ export class ReactViewer extends SuperViewer {
   public async openViewer(fileUri: vscode.Uri) {
     await this.initWorkspaceUri(fileUri)
     await this.writeFiles()
-    this.runProcess(path.join(this.targetServiceDir.fsPath, 'bin', 'react-scripts.js'), ['start'])
+    this.runProcess(path.join(this.targetServiceDir.fsPath, 'scripts', 'start.js'), [])
   }
 
   private async writeFiles() {
