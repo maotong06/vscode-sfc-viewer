@@ -7,7 +7,7 @@
  */
 // @remove-on-eject-end
 'use strict';
-
+var portfinder = require('../run-time-script/utils/portfinder/portfinder.js')
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
@@ -86,9 +86,21 @@ if (process.env.HOST) {
 const { checkBrowsers } = require('react-dev-utils/browsersHelper');
 checkBrowsers(paths.appPath, isInteractive)
   .then(() => {
+    portfinder.basePort = DEFAULT_PORT
+    return portfinder.getPortPromise()
+    .then(newPort => {
+        if (DEFAULT_PORT !== newPort) {
+          console.log(`${DEFAULT_PORT}端口被占用，开启新端口${newPort}`)
+        }
+        return newPort
+    }).catch(error => {
+      console.log('没有找到空闲端口，请打开任务管理器杀死进程端口再试', error)
+    })
+  })
+  .then((newPort) => {
     // We attempt to use the default port but if it is busy, we offer the user to
     // run on a different port. `choosePort()` Promise resolves to the next free port.
-    return choosePort(HOST, DEFAULT_PORT);
+    return choosePort(HOST, newPort);
   })
   .then(port => {
     if (port == null) {

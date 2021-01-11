@@ -36,7 +36,7 @@ module.exports = function (source, map) {
   let endStr = source.slice(end)
   let newSource = `import ${config.sfcTagName} from '${config.targetSFCPath}'
 ${startStr}<${config.sfcTagName} />${endStr}`
-  console.log('source.slice(path.node.start, path.node.end)', newSource)
+  // console.log('source.slice(path.node.start, path.node.end)', newSource)
   this.callback(
     null,
     newSource,
