@@ -38,7 +38,7 @@ export class StatusbarUi {
   // }
 
   private static showOpenSfc() {
-    console.log('window.activeTextEditor?.document.languageId', window.activeTextEditor?.document.languageId)
+    // console.log('window.activeTextEditor?.document.languageId', window.activeTextEditor?.document.languageId)
     if (window.activeTextEditor?.document.languageId) {
 
       switch (window.activeTextEditor?.document.languageId) {
