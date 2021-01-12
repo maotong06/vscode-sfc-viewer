@@ -2,18 +2,23 @@ import { ExtensionContext, ExtensionMode, OutputChannel, Uri, window } from 'vsc
 
 export class Logger {
   static extensionOutputChannelName = 'sfc viwer'
-  private output: OutputChannel | undefined;
-  constructor() {
-    this.output = this.output ? this.output : window.createOutputChannel(Logger.extensionOutputChannelName)
+  private static _output: OutputChannel | undefined;
+
+  private static get outputChannal(): OutputChannel {
+    if (!Logger._output) {
+      Logger._output = window.createOutputChannel(Logger.extensionOutputChannelName)
+    }
+
+    return Logger._output;
   }
-  log(val: string) {
-    console.log('logger log', val)
-    this.output?.appendLine(String(val))
+  public static log(val: string) {
+    console.log('logger log', String(val))
+    Logger.outputChannal.appendLine(String(val))
   }
-  show() {
-    this.output?.show()
+  public static show() {
+    Logger.outputChannal.show()
   }
-  clear() {
-    this.output?.clear()
+  public static clear() {
+    Logger.outputChannal.clear()
   }
 }

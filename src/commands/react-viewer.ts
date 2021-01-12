@@ -12,8 +12,8 @@ export class ReactViewer extends SuperViewer {
   protected nodeModuleDirName = 'react-scripts'
   protected matchLanguageIds = ['jsx', 'javascriptreact', 'typescriptreact']
 
-  public constructor(context: vscode.ExtensionContext, logger: Logger) {
-    super(context, logger)
+  public constructor(context: vscode.ExtensionContext) {
+    super(context)
   }
   
   public async openViewer(fileUri: vscode.Uri) {

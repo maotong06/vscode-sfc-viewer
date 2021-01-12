@@ -14,9 +14,8 @@ let child = {} as cp.ChildProcess
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	let logger = new Logger()
-	let vueViewer = new VueViewer(context, logger)
-	let reactViewer = new ReactViewer(context, logger)
+	let vueViewer = new VueViewer(context)
+	let reactViewer = new ReactViewer(context)
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
@@ -25,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand(
 		cmd.VUE_OPEN,
 		async (fileUri) => {
-			logger.show()
+			Logger.show()
 			vueViewer.openViewer(fileUri)
 		}
 	));
@@ -38,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand(
 		cmd.REACT_OPEN,
 		async (fileUri) => {
-			logger.show()
+			Logger.show()
 			reactViewer.openViewer(fileUri)
 		}
 	));

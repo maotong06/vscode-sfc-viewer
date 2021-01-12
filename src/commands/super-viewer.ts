@@ -15,11 +15,9 @@ export abstract class SuperViewer {
   protected originServiceDir: vscode.Uri = {} as vscode.Uri
   protected targetServiceDir: vscode.Uri = {} as vscode.Uri
   protected workspaceFoldersUri: vscode.Uri = {} as vscode.Uri
-  public logger: Logger = {} as Logger
 
-  public constructor(context: vscode.ExtensionContext, logger: Logger) {
+  public constructor(context: vscode.ExtensionContext) {
     this.context = context
-    this.logger = logger
   }
 
   public abstract openViewer(fileUri: vscode.Uri): any
@@ -29,7 +27,7 @@ export abstract class SuperViewer {
     if (this.child.kill) {
       this.child.send({ code: 'close' })
       this.child.kill()
-      this.logger.log('已关闭进程')
+      Logger.log('已关闭进程')
     }
   }
 
@@ -49,24 +47,24 @@ export abstract class SuperViewer {
       },
     );
     this.child.on('message', (msg) => {
-      this.logger.log(msg)
+      Logger.log(msg)
     })
     // 监听子进程
     if (this.child && this.child.stdout) {
     this.child.stdout.on('data', (data) => {
-        this.logger.log(`stdout: ${data}`);
+        Logger.log(data);
       });
     }
     if (this.child && this.child.stderr) {
       this.child.stderr.on('data', (data) => {
         if (data.indexOf('webpack.Progress') < 0) {
-          this.logger.log(`stderr: ${data}`);
+          Logger.log(data);
         }
       });
     }
     this.child.on('close', (code) => {
       StatusbarUi.changeOpening(false)
-      this.logger.log(`child process exited with code ${code}`);
+      Logger.log(`child process exited with code ${code}`);
     });
   }
 
