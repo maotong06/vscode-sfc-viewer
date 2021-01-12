@@ -1,4 +1,4 @@
-import { StatusbarUi } from './statusUI';
+import { StatusbarUi } from './StatusUI';
 import { TextDocument } from 'vscode'
 import * as cmd from './const/commends'
 

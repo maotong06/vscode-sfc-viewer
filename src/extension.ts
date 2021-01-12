@@ -1,5 +1,5 @@
-import { StatusbarUi } from './statusUI';
-import { Logger } from './logger';
+import { StatusbarUi } from './StatusUI';
+import { Logger } from './Logger';
 import { ReactViewer } from './commands/react-viewer';
 import { VueViewer } from './commands/vue-viewer';
 // The module 'vscode' contains the VS Code extensibility API

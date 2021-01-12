@@ -1,4 +1,4 @@
-import { Logger } from './../logger';
+import { Logger } from '../Logger';
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as cp from 'child_process';
