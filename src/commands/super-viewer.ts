@@ -1,3 +1,4 @@
+import { StatusbarUi } from './../statusUI';
 import { Logger } from './../logger';
 import * as cp from 'child_process';
 import * as vscode from 'vscode';
@@ -23,6 +24,7 @@ export abstract class SuperViewer {
   public abstract openViewer(fileUri: vscode.Uri): any
 
   public closeViewer() {
+    StatusbarUi.changeOpening(false)
     if (this.child.kill) {
       this.child.send({ code: 'close' })
       this.child.kill()
@@ -34,12 +36,8 @@ export abstract class SuperViewer {
     if (!vscode.workspace.workspaceFolders) {
       return
     }
-    if (this.child.kill) {
-      this.child.send({ code: 'close' })
-      this.child.kill()
-      this.logger.log('已关闭进程')
-      this.child = {} as cp.ChildProcess
-    }
+    this.closeViewer()
+    StatusbarUi.changeOpening(true)
     this.child = cp.fork(
       moudulePath,
       execArgs,
@@ -65,20 +63,23 @@ export abstract class SuperViewer {
       });
     }
     this.child.on('close', (code) => {
+      StatusbarUi.changeOpening(false)
       this.logger.log(`child process exited with code ${code}`);
     });
   }
 
   protected initWorkspaceUri(fileUri: vscode.Uri) {
     if (!(vscode.workspace && vscode.workspace.workspaceFolders)) {
-      throw new Error('未找到工作区文件夹')
+      vscode.window.showInformationMessage('Workspace not opened')
+      throw new Error()
     }
     if (fileUri) {
       this.sfcFileFsPath = fileUri.fsPath
     } else if (vscode.window.activeTextEditor?.document.languageId && this.matchLanguageIds.includes(vscode.window.activeTextEditor?.document.languageId)) {
       this.sfcFileFsPath = vscode.window.activeTextEditor?.document.fileName
     } else {
-      throw new Error('当前没有打开或指定文件')
+      vscode.window.showInformationMessage('The specified file is not currently open')
+      throw new Error()
     }
 
     this.workspaceFoldersUri = vscode.workspace.workspaceFolders[0].uri

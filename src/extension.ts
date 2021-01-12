@@ -1,3 +1,4 @@
+import { StatusbarUi } from './statusUI';
 import { Logger } from './logger';
 import { ReactViewer } from './commands/react-viewer';
 import { VueViewer } from './commands/vue-viewer';
@@ -6,6 +7,8 @@ import { VueViewer } from './commands/vue-viewer';
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as cp from 'child_process';
+import * as cmd from './const/commends';
+import { onDidOpenTextDocument } from './EventListeners';
 let child = {} as cp.ChildProcess
 
 // this method is called when your extension is activated
@@ -20,31 +23,32 @@ export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "vscode-sfc-viewer" is now active!');
 
 	context.subscriptions.push(vscode.commands.registerCommand(
-		'extension.vscode-sfc-viewer.openVueViewer',
+		cmd.VUE_OPEN,
 		async (fileUri) => {
 			logger.show()
 			vueViewer.openViewer(fileUri)
 		}
 	));
 	context.subscriptions.push(vscode.commands.registerCommand(
-		'extension.vscode-sfc-viewer.killVueViewer',
+		cmd.VUE_CLOSE,
 		() => {
 			vueViewer.closeViewer()
 		}
 	));
 	context.subscriptions.push(vscode.commands.registerCommand(
-		'extension.vscode-sfc-viewer.openReactViewer',
+		cmd.REACT_OPEN,
 		async (fileUri) => {
 			logger.show()
 			reactViewer.openViewer(fileUri)
 		}
 	));
 	context.subscriptions.push(vscode.commands.registerCommand(
-		'extension.vscode-sfc-viewer.killReactViewer',
+		cmd.REACT_CLOSE,
 		() => {
 			reactViewer.closeViewer()
 		}
 	));
+	context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(onDidOpenTextDocument))
 }
 
 // this method is called when your extension is deactivated
