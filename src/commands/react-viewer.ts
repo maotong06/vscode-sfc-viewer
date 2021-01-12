@@ -1,3 +1,4 @@
+import { Logger } from './../logger';
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as cp from 'child_process';
@@ -11,8 +12,8 @@ export class ReactViewer extends SuperViewer {
   protected nodeModuleDirName = 'react-scripts'
   protected matchLanguageIds = ['jsx', 'javascriptreact', 'typescriptreact']
 
-  public constructor(context: vscode.ExtensionContext) {
-    super(context)
+  public constructor(context: vscode.ExtensionContext, logger: Logger) {
+    super(context, logger)
   }
   
   public async openViewer(fileUri: vscode.Uri) {

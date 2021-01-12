@@ -1,3 +1,4 @@
+import { Logger } from './../logger';
 import * as cp from 'child_process';
 import * as vscode from 'vscode';
 import * as path from 'path'
@@ -12,9 +13,11 @@ export abstract class SuperViewer {
   protected originServiceDir: vscode.Uri = {} as vscode.Uri
   protected targetServiceDir: vscode.Uri = {} as vscode.Uri
   protected workspaceFoldersUri: vscode.Uri = {} as vscode.Uri
+  public logger: Logger = {} as Logger
 
-  public constructor(context: vscode.ExtensionContext) {
+  public constructor(context: vscode.ExtensionContext, logger: Logger) {
     this.context = context
+    this.logger = logger
   }
 
   public abstract openViewer(fileUri: vscode.Uri): any
@@ -23,7 +26,7 @@ export abstract class SuperViewer {
     if (this.child.kill) {
       this.child.send({ code: 'close' })
       this.child.kill()
-      console.log('已关闭进程')
+      this.logger.log('已关闭进程')
     }
   }
 
@@ -34,7 +37,7 @@ export abstract class SuperViewer {
     if (this.child.kill) {
       this.child.send({ code: 'close' })
       this.child.kill()
-      console.log('已关闭进程')
+      this.logger.log('已关闭进程')
       this.child = {} as cp.ChildProcess
     }
     this.child = cp.fork(
@@ -46,23 +49,23 @@ export abstract class SuperViewer {
       },
     );
     this.child.on('message', (msg) => {
-      console.log('msg', msg)
+      this.logger.log(msg)
     })
     // 监听子进程
     if (this.child && this.child.stdout) {
     this.child.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
+        this.logger.log(`stdout: ${data}`);
       });
     }
     if (this.child && this.child.stderr) {
       this.child.stderr.on('data', (data) => {
         if (data.indexOf('webpack.Progress') < 0) {
-          console.error(`stderr: ${data}`);
+          this.logger.log(`stderr: ${data}`);
         }
       });
     }
     this.child.on('close', (code) => {
-      console.log(`child process exited with code ${code}`);
+      this.logger.log(`child process exited with code ${code}`);
     });
   }
 
