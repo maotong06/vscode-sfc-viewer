@@ -1,3 +1,4 @@
+import { Config } from './../Config';
 import { StatusbarUi } from '../StatusUI';
 import { Logger } from '../Logger';
 import * as cp from 'child_process';
@@ -37,10 +38,11 @@ export abstract class SuperViewer {
       return
     }
     this.closeViewer()
+    console.log('Config.getRunArgs()', Config.getRunArgs())
     StatusbarUi.changeOpening(true)
     this.child = cp.fork(
       moudulePath,
-      execArgs,
+      execArgs.concat(Config.getRunArgs()),
       {
         cwd: vscode.workspace.workspaceFolders[0].uri.fsPath,
         silent: true

@@ -5,6 +5,7 @@ export class StatusbarUi {
   private static _statusBarItem: StatusBarItem;
   private static _isOpening: boolean = false
   private static _closeCmd: string = ''
+  private static _openCmd: string = ''
 
   private static get statusbar() {
     if (!StatusbarUi._statusBarItem) {
@@ -40,31 +41,32 @@ export class StatusbarUi {
   private static showOpenSfc() {
     // console.log('window.activeTextEditor?.document.languageId', window.activeTextEditor?.document.languageId)
     if (window.activeTextEditor?.document.languageId) {
-
       switch (window.activeTextEditor?.document.languageId) {
         case 'vue':
-          StatusbarUi.statusbar.text = '$(radio-tower)Open sfc'
-          StatusbarUi.statusbar.command = cmd.VUE_OPEN
-          StatusbarUi.statusbar.tooltip = 'Click to open sfc'
           StatusbarUi._closeCmd = cmd.VUE_CLOSE
-          StatusbarUi.statusbar.show()
+          StatusbarUi._openCmd = cmd.VUE_OPEN
+          StatusbarUi.setOpenShowSfc()
           break;
         case 'javascriptreact':
         case 'typescriptreact':
-          StatusbarUi.statusbar.text = '$(radio-tower)Open sfc'
-          StatusbarUi.statusbar.command = cmd.REACT_OPEN
-          StatusbarUi.statusbar.tooltip = 'Click to open sfc'
           StatusbarUi._closeCmd = cmd.REACT_CLOSE
-          StatusbarUi.statusbar.show()
+          StatusbarUi._openCmd = cmd.REACT_OPEN
+          StatusbarUi.setOpenShowSfc()
           break;
         default:
-          // StatusbarUi.hidden()
+          StatusbarUi.setOpenShowSfc()
           break;
       }
     } else {
-      // StatusbarUi.hidden()
+      StatusbarUi.setOpenShowSfc()
     }
-    
+  }
+
+  private static setOpenShowSfc() {
+    StatusbarUi.statusbar.text = '$(radio-tower)Open sfc'
+    StatusbarUi.statusbar.command = StatusbarUi._openCmd
+    StatusbarUi.statusbar.tooltip = 'Click to open sfc'
+    StatusbarUi.statusbar.show()
   }
 
   private static showCloseSfc() {

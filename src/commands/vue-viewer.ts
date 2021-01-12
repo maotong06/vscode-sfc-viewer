@@ -30,7 +30,7 @@ export class VueViewer extends SuperViewer {
     const targetConfigFileUrl = vscode.Uri.joinPath(this.targetServiceDir, 'run-time-script', 'config.js')
     const devComponentPath = vscode.Uri.joinPath(this.targetServiceDir, 'run-time-script', 'components', 'devComp', 'devComp.vue').fsPath
     const targetPackageJson = JSON.parse((await vscode.workspace.fs.readFile(vscode.Uri.joinPath(this.workspaceFoldersUri, 'package.json'))).toString())
-    console.log('targetPackageJson', targetPackageJson)
+    // console.log('targetPackageJson', targetPackageJson)
     let originConfigStr = await (await vscode.workspace.fs.readFile(originConfigFileUrl)).toString()
     const configContent = Buffer.from(
       templateRender(originConfigStr, {
@@ -39,7 +39,7 @@ export class VueViewer extends SuperViewer {
         vueVersion: getPackageVersion(targetPackageJson, 'vue'),
         isTs: getPackageVersion(targetPackageJson, 'typescript') ? 'true': 'false'})
       , 'utf8') 
-    console.log(configContent)
+    // console.log(configContent)
     await vscode.workspace.fs.writeFile(targetConfigFileUrl, configContent);
   }
 }

@@ -57,7 +57,17 @@
           "when": "resourceLangId == jsx || resourceLangId == javascriptreact || resourceLangId == typescriptreact"
         }
       ]
-    }
+		},
+		"configuration": {
+      "title": "SFCViewer",
+      "properties": {
+				"SFCViewer.setting.runArgs": {
+					"type": "array",
+          "default": [],
+          "description": "Set your project running arg on starts, like ['--mode', 'development']  in vue cli after 'npm run serve', "
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
