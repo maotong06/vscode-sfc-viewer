@@ -4,13 +4,11 @@ const config = require('../config.js')
 module.exports = function (source, map) {
   const parser = require("@babel/parser")
   const traverse = require("@babel/traverse")
+
   const sourceParse = parser.parse(source, {
     // parse in strict mode and allow module declarations
     sourceType: "module",
-    plugins: [
-      // enable jsx and flow syntax
-      "jsx",
-    ]
+    plugins: config.isTs ? ["typescript", "jsx"] : ["jsx"]
   });
   let start = 0
   let end = 0
