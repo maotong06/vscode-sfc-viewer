@@ -135,3 +135,16 @@ export function processSetupState (instance) {
     return []
   }
 }
+
+export function processFunction (instance) {
+  console.log('instance.setupState', instance.proxy)
+  if (vueBigVersion === '3') {
+    return Object.keys(instance.proxy)
+      .filter(key => typeof instance.proxy[key] === 'function')
+      .map(key => ({
+        key,
+      }))
+  } else {
+    return []
+  }
+}

@@ -37,14 +37,21 @@
           @addRef="addRef"
           @currentEditingFieldChange="currentEditingFieldChange"
           @saveValue="saveValue"/>
+          <h4>run methods: </h4>
+          <runFunctionField
+            v-for="(prop) in vmFunctions"
+            :key="prop.key"
+            :method="prop"
+            @runFunction="runFunction"/>
         </div>
       </div>
   </div>
 </template>
 
 <script>
-import { processState, processProps, processSetupState } from './process'
+import { processState, processProps, processSetupState, processFunction } from './process'
 import dataField from './fieldComps/dataField.vue'
+import runFunctionField from './fieldComps/runFunctionField.vue'
 import config from '../../config.js'
 import getBigVersion from '../../loaders/utils/getBigVersion.js'
 const vueBigVersion = getBigVersion(config.vueVersion)
@@ -52,12 +59,14 @@ const vueBigVersion = getBigVersion(config.vueVersion)
 export default {
   components: {
     dataField,
+    runFunctionField,
   },
   data() {
     return {
       vmProps: [],
       vmDatas: [],
       vmSetupState: [],
+      vmFunctions: [],
       vm: {},
       isShowConsole: false,
       dataRefs: [],
@@ -85,9 +94,11 @@ export default {
       this.vmProps = processProps(this.vm)
       this.vmDatas = processState(this.vm)
       this.vmSetupState = processSetupState(this.vm)
+      this.vmFunctions = processFunction(this.vm)
       console.log('this.vmProps', this.vmProps)
       console.log('this.vmDatas', this.vmDatas)
       console.log('this.vmSetupState', this.vmSetupState)
+      console.log('this.vmFunctions', this.vmFunctions)
     },
     saveValue(key, value, type) {
       console.log('this.vm', this.vm)
@@ -112,6 +123,10 @@ export default {
     },
     addRef(vm) {
       this.dataRefs.push(vm)
+    },
+    runFunction(key, args) {
+      console.log('runFunction')
+      this.vm.proxy[key](...args)
     }
   }
 }
