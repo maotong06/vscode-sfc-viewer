@@ -69,6 +69,7 @@ export function processProps (instance) {
         type: 'props',
         key,
         value: instance.props[key],
+        editable: true,
         meta: prop ? {
           type: prop.type ? getPropType(prop.type) : 'any',
           required: !!prop.required
@@ -88,6 +89,7 @@ export function processProps (instance) {
         type: 'props',
         key: prop.path,
         value: instance[prop.path],
+        editable: true,
         meta: options ? {
           type: options.type ? getPropType(options.type) : 'any',
           required: !!options.required,
@@ -105,6 +107,7 @@ export function processProps (instance) {
         type: 'props',
         key,
         value: instance[key],
+        editable: true,
         meta: prop ? {
           type: prop.type ? getPropType(prop.type) : 'any',
           required: !!prop.required
@@ -115,6 +118,19 @@ export function processProps (instance) {
       })
     }
     return propsData
+  } else {
+    return []
+  }
+}
+
+export function processSetupState (instance) {
+  console.log('instance.setupState', instance.setupState)
+  if (vueBigVersion === '3') {
+    return Object.keys(instance.setupState).map(key => ({
+      key,
+      value: typeof instance.setupState[key] === 'function' ? 'function' : instance.setupState[key],
+      editable: typeof instance.setupState[key] === 'function' ? false : true
+    }))
   } else {
     return []
   }

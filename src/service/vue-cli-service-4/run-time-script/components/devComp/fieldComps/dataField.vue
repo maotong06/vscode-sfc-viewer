@@ -23,7 +23,7 @@
       <img src="../img/save.png" alt="" class="more_img icon" @click="saveValue(prop)">
     </div>
     <div v-else class="flex_item">
-      <img src="../img/edit.png" alt="" class="icon" @click="editing(prop)">
+      <img v-if="prop.editable" src="../img/edit.png" alt="" class="icon" @click="editing(prop)">
       <!-- <span class="more_img_box">
         <img src="../img/more.png" alt="" class="more_img icon" >
         <div class="more_tips">
@@ -63,6 +63,9 @@ export default {
       }
     },
     editing(prop) {
+      if (!this.prop.editable) {
+        return
+      }
       this.$emit('currentEditingFieldChange')
       this.isEditing = true
       this.isInputValError = false

@@ -7,7 +7,7 @@
 
       </div>
       <div class="field_content">
-        <div>props: </div>
+        <h4>props: </h4>
         <dataField
           v-for="(prop) in vmProps"
           :key="prop.key"
@@ -17,7 +17,7 @@
           @addRef="addRef"
           @currentEditingFieldChange="currentEditingFieldChange"
           @saveValue="saveValue"/>
-        <div>data: </div>
+        <h4>data: </h4>
         <dataField
           v-for="(prop) in vmDatas"
           :key="prop.key"
@@ -27,13 +27,23 @@
           @addRef="addRef"
           @currentEditingFieldChange="currentEditingFieldChange"
           @saveValue="saveValue"/>
+        <h4>setupState: </h4>
+        <dataField
+          v-for="(prop) in vmSetupState"
+          :key="prop.key"
+          ref="dataField"
+          :prop="prop"
+          type="setupState"
+          @addRef="addRef"
+          @currentEditingFieldChange="currentEditingFieldChange"
+          @saveValue="saveValue"/>
         </div>
       </div>
   </div>
 </template>
 
 <script>
-import { processState, processProps } from './process'
+import { processState, processProps, processSetupState } from './process'
 import dataField from './fieldComps/dataField.vue'
 import config from '../../config.js'
 import getBigVersion from '../../loaders/utils/getBigVersion.js'
@@ -47,9 +57,11 @@ export default {
     return {
       vmProps: [],
       vmDatas: [],
+      vmSetupState: [],
       vm: {},
       isShowConsole: false,
-      dataRefs: []
+      dataRefs: [],
+      vueBigVersion: vueBigVersion
     }
   },
   mounted() {
@@ -63,7 +75,7 @@ export default {
       } else {
         targetComponent = this.$parent.$children.find(i => i.$vnode.tag.includes('HelloWorld'))
       }
-      console.log('targetComponent', targetComponent)
+      console.log('targetComponent', targetComponent.component)
       this.vm = targetComponent.component
       this.initData()
     })
@@ -72,8 +84,10 @@ export default {
     initData() {
       this.vmProps = processProps(this.vm)
       this.vmDatas = processState(this.vm)
+      this.vmSetupState = processSetupState(this.vm)
       console.log('this.vmProps', this.vmProps)
       console.log('this.vmDatas', this.vmDatas)
+      console.log('this.vmSetupState', this.vmSetupState)
     },
     saveValue(key, value, type) {
       console.log('this.vm', this.vm)
