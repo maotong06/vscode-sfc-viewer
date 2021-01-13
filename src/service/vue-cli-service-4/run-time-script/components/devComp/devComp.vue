@@ -12,7 +12,9 @@
           v-for="(prop) in vmProps"
           :key="prop.key"
           ref="dataField"
+          type="props"
           :prop="prop"
+          @addRef="addRef"
           @currentEditingFieldChange="currentEditingFieldChange"
           @saveValue="saveValue"/>
         <div>data: </div>
@@ -21,6 +23,8 @@
           :key="prop.key"
           ref="dataField"
           :prop="prop"
+          type="data"
+          @addRef="addRef"
           @currentEditingFieldChange="currentEditingFieldChange"
           @saveValue="saveValue"/>
         </div>
@@ -31,6 +35,9 @@
 <script>
 import { processState, processProps } from './process'
 import dataField from './fieldComps/dataField.vue'
+import config from '../../config.js'
+import getBigVersion from '../../loaders/utils/getBigVersion.js'
+const vueBigVersion = getBigVersion(config.vueVersion)
 
 export default {
   components: {
@@ -42,14 +49,22 @@ export default {
       vmDatas: [],
       vm: {},
       isShowConsole: false,
+      dataRefs: []
     }
   },
   mounted() {
     this.$nextTick(() => {
-      console.log('this.$parent', this.$parent)
-      let helloWorldComp = this.$parent.$children.find(i => i.$vnode.tag.includes('HelloWorld'))
-      console.log('helloWorldComp._props', helloWorldComp)
-      this.vm = helloWorldComp
+      let targetComponent
+      console.log('this', this.$parent.$)
+      if (vueBigVersion === '3') {
+        targetComponent = this.$parent.$.subTree.children.find(i => {
+          return config.targetSFCPath.indexOf(i.type.__file) > -1
+        })
+      } else {
+        targetComponent = this.$parent.$children.find(i => i.$vnode.tag.includes('HelloWorld'))
+      }
+      console.log('targetComponent', targetComponent)
+      this.vm = targetComponent.component
       this.initData()
     })
   },
@@ -57,15 +72,32 @@ export default {
     initData() {
       this.vmProps = processProps(this.vm)
       this.vmDatas = processState(this.vm)
+      console.log('this.vmProps', this.vmProps)
+      console.log('this.vmDatas', this.vmDatas)
     },
-    saveValue(key, value) {
-      this.vm[key] = value
+    saveValue(key, value, type) {
+      console.log('this.vm', this.vm)
+      if (vueBigVersion === '3') {
+        this.vm[type][key] = value
+      } else {
+        this.vm[key] = value
+      }
       this.initData()
     },
     currentEditingFieldChange() {
-      this.$refs.dataField.forEach(i => {
-        i.cancelInput()
-      })
+      console.log('his.$refs.dataField', this.dataRefs)
+      if (vueBigVersion === '3') {
+        this.dataRefs && this.dataRefs.forEach(i => {
+          i.cancelInput()
+        })
+      } else {
+        this.$refs.dataField && this.$refs.dataField.forEach(i => {
+          i.cancelInput()
+        })
+      }
+    },
+    addRef(vm) {
+      this.dataRefs.push(vm)
     }
   }
 }

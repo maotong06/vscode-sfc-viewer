@@ -15,6 +15,7 @@
         v-show="isEditing"
         type="text"
         @input="propsInputHandle(prop, $event)"
+        @keydown.enter="saveValue(prop)"
         :value="inputCache">
     </div>
     <div class="flex_item" v-if="isEditing">
@@ -36,7 +37,7 @@
 
 <script>
 export default {
-  props: ['prop'],
+  props: ['prop', 'type'],
   data() {
     return {
       isInputValError: false,
@@ -80,7 +81,7 @@ export default {
         return
       }
       this.isEditing = false
-      this.$emit('saveValue', this.prop.key, this.parse(this.inputCache))
+      this.$emit('saveValue', this.prop.key, this.parse(this.inputCache), this.type)
     },
     cancelInput() {
       this.isEditing = false

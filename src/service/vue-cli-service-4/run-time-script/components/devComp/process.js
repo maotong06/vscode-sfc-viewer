@@ -1,6 +1,10 @@
 const fnTypeRE = /^(?:function|class) (\w+)/
+import config from '../../config.js'
+import getBigVersion from '../../loaders/utils/getBigVersion.js'
 let isLegacy = false
 
+const vueBigVersion = getBigVersion(config.vueVersion)
+console.log('vueBigVersion', vueBigVersion)
 export function getPropType (type) {
   const match = type.toString().match(fnTypeRE)
   return typeof type === 'function'
@@ -18,22 +22,30 @@ export function getPropType (type) {
  * @return {Array}
  */
 export function processState (instance) {
-  const props = isLegacy
-    ? instance._props
-    : instance.$options.props
-  const getters =
-    instance.$options.vuex &&
-    instance.$options.vuex.getters
-  return Object.keys(instance._data)
-    .filter(key => (
-      !(props && key in props) &&
-      !(getters && key in getters)
-    ))
-    .map(key => ({
+  if (vueBigVersion === '3') {
+    return Object.keys(instance.data).map(key => ({
       key,
-      value: instance._data[key],
+      value: instance.data[key],
       editable: true
     }))
+  } else {
+    const props = isLegacy
+      ? instance._props
+      : instance.$options.props
+    const getters =
+      instance.$options.vuex &&
+      instance.$options.vuex.getters
+    return Object.keys(instance._data)
+      .filter(key => (
+        !(props && key in props) &&
+        !(getters && key in getters)
+      ))
+      .map(key => ({
+        key,
+        value: instance._data[key],
+        editable: true
+      }))
+  }
 }
 
 /**
@@ -47,7 +59,27 @@ export function processState (instance) {
 
 export function processProps (instance) {
   let props
-  if (isLegacy && (props = instance._props)) {
+  const propsData = []
+  console.log()
+  if (vueBigVersion === '3') {
+    for (let key in instance.propsOptions[0]) {
+      // key = camelize(key)
+      let prop = instance.propsOptions[0][key]
+      propsData.push({
+        type: 'props',
+        key,
+        value: instance.props[key],
+        meta: prop ? {
+          type: prop.type ? getPropType(prop.type) : 'any',
+          required: !!prop.required
+        } : {
+          type: 'invalid'
+        },
+        // editable: SharedData.editableProps
+      })
+    }
+    return propsData
+  } else if (isLegacy && (props = instance._props)) {
     // 1.x
     return Object.keys(props).map(key => {
       const prop = props[key]
