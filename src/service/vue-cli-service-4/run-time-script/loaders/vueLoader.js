@@ -23,12 +23,13 @@ module.exports = function (source, map) {
     )
     return
   }
-  let version = config.vueVersion.match(/\d/)
-  if (version && version[0] === '3') {
-    newSourse = changeVue3Source(source)
-  } else if (version && version[0] === '2') {
-    newSourse = changeVue2Source(source)
-  }
+  newSourse = changeVue3Source(source)
+  // let version = config.vueVersion.match(/\d/)
+  // if (version && version[0] === '3') {
+    // newSourse = changeVue3Source(source)
+  // } else if (version && version[0] === '2') {
+  //   newSourse = changeVue2Source(source)
+  // }
   // throw new Error('停止')
 
   this.callback(
@@ -38,42 +39,42 @@ module.exports = function (source, map) {
   )
 }
 
-function changeVue2Source(source) {
-  const compiler = require('./utils/vue-template-compiler/index.js')
-  // console.log('compiler', compiler)
-  // console.log('parsed', compiler.compile(source, { outputSourceRange: true }))
-  const templateInfo = compiler.parseComponent(source, {deindent: false}).template
-  const tempCompileInfo = compiler.compile(templateInfo.content, { outputSourceRange: true })
-  // console.log('templateInfo', templateInfo.content.match(/^\s+/))
-  // console.log('compileTemp', tempCompileInfo)
-  let templateStartBlackLength = templateInfo.content.match(/^\s+/) ? templateInfo.content.match(/^\s+/)[0].length : 0
-  let templateEndBlackLength = templateInfo.content.match(/\s+$/) ? templateInfo.content.match(/\s+$/)[0].length : 0
-  let start = templateInfo.start + templateStartBlackLength
-  let end = templateInfo.end - templateEndBlackLength
-  if (tempCompileInfo.ast.children.length >= 1) {
-    // 找到子element中开始和结束为止
-    let tempStart = Infinity
-    tempCompileInfo.ast.children.forEach(ele => {
-      if (ele.start < tempStart) {
-        tempStart = ele.start
-        tagName = ele.tag
-      }
-    })
-    start = start + tempStart
-  } else {
-    throw new Error()
-  }
-  const startStr = source.slice(0, start)
-  const endStr = source.slice(end)
-  return `${startStr}
-<${config.sfcTagName} />
-<${config.devComponentTag} />
-</${tempCompileInfo.ast.tag}>
-${endStr}`
-}
+// function changeVue2Source(source) {
+//   const compiler = require('./utils/vue-template-compiler/index.js')
+//   // console.log('compiler', compiler)
+//   // console.log('parsed', compiler.compile(source, { outputSourceRange: true }))
+//   const templateInfo = compiler.parseComponent(source, {deindent: false}).template
+//   const tempCompileInfo = compiler.compile(templateInfo.content, { outputSourceRange: true })
+//   // console.log('templateInfo', templateInfo.content.match(/^\s+/))
+//   // console.log('compileTemp', tempCompileInfo)
+//   let templateStartBlackLength = templateInfo.content.match(/^\s+/) ? templateInfo.content.match(/^\s+/)[0].length : 0
+//   let templateEndBlackLength = templateInfo.content.match(/\s+$/) ? templateInfo.content.match(/\s+$/)[0].length : 0
+//   let start = templateInfo.start + templateStartBlackLength
+//   let end = templateInfo.end - templateEndBlackLength
+//   if (tempCompileInfo.ast.children.length >= 1) {
+//     // 找到子element中开始和结束为止
+//     let tempStart = Infinity
+//     tempCompileInfo.ast.children.forEach(ele => {
+//       if (ele.start < tempStart) {
+//         tempStart = ele.start
+//         tagName = ele.tag
+//       }
+//     })
+//     start = start + tempStart
+//   } else {
+//     throw new Error()
+//   }
+//   const startStr = source.slice(0, start)
+//   const endStr = source.slice(end)
+//   return `${startStr}
+// <${config.sfcTagName} />
+// <${config.devComponentTag} />
+// </${tempCompileInfo.ast.tag}>
+// ${endStr}`
+// }
 
 function changeVue3Source(source) {
-  const compiler = require('./utils/vue3-compiler-sfc/compiler-sfc.js')
+  const compiler = require('./utils/vue3-compiler-sfc/compiler-sfc.global.js')
   let parseSource = compiler.parse(source, { sourceMap: true })
   let template = parseSource.descriptor.template
   let props = []
