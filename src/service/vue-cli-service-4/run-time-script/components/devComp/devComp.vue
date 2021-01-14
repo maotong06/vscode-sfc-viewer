@@ -80,12 +80,25 @@ export default {
       if (vueBigVersion === '3') {
         targetComponent = this.$parent.$.subTree.children.find(i => {
           return config.targetSFCPath.indexOf(i.type.__file) > -1
-        })
+        }).component
       } else {
-        targetComponent = this.$parent.$children.find(i => i.$vnode.tag.includes('HelloWorld'))
+        targetComponent = this.$parent.$children.find(i => {
+          if (i.$options) {
+            return i.$options._componentTag === config.sfcTagName
+          }
+        })
       }
-      console.log('targetComponent', targetComponent.component)
-      this.vm = targetComponent.component
+      console.log('targetComponent', targetComponent)
+      this.vm = targetComponent
+      window.$vm = this.vm
+      for (const key in this.vm) {
+        if (Object.hasOwnProperty.call(this.vm, key)) {
+          if (typeof this.vm[key] === 'function') {
+            const element = this.vm[key];
+            console.log('key', key)
+          }
+        }
+      }
       this.initData()
     })
   },
@@ -126,7 +139,11 @@ export default {
     },
     runFunction(key, args) {
       console.log('runFunction')
-      this.vm.proxy[key](...args)
+      if (vueBigVersion === '3') {
+        this.vm.proxy[key](...args)
+      } else {
+        this.vm[key](...args)
+      }
     }
   }
 }

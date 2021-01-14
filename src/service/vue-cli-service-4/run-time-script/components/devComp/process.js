@@ -145,6 +145,13 @@ export function processFunction (instance) {
         key,
       }))
   } else {
-    return []
+    return Object.keys(instance)
+      .filter(key => (Object.hasOwnProperty.call(instance, key) &&
+        (typeof instance[key] === 'function') && 
+        !['_c', '$createElement'].includes(key)
+        ))
+      .map(key => ({
+        key,
+      }))
   }
 }
