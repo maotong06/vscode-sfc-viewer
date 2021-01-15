@@ -32,9 +32,6 @@ export abstract class SuperViewer {
   }
 
   protected runProcess(moudulePath: string, execArgs: string[]) {
-    if (!vscode.workspace.workspaceFolders) {
-      return
-    }
     this.closeViewer()
     console.log('Config.getRunArgs()', Config.getRunArgs())
     StatusbarUi.changeOpening(true)
@@ -42,7 +39,7 @@ export abstract class SuperViewer {
       moudulePath,
       execArgs.concat(Config.getRunArgs()),
       {
-        cwd: vscode.workspace.workspaceFolders[0].uri.fsPath,
+        cwd: this.workspaceFoldersUri.fsPath,
         silent: true
       },
     );
@@ -81,8 +78,16 @@ export abstract class SuperViewer {
       vscode.window.showInformationMessage('The specified file is not currently open')
       throw new Error()
     }
-
-    this.workspaceFoldersUri = vscode.workspace.workspaceFolders[0].uri
+    arguments
+    const works = vscode.workspace.workspaceFolders.find(w => {
+      return this.sfcFileFsPath.includes(w.uri.fsPath)
+    })
+    if (works && works.uri) {
+      this.workspaceFoldersUri = works.uri
+    } else {
+      vscode.window.showInformationMessage('not find the Workspace')
+      throw new Error('未找到对用工作区')
+    }
     this.originServiceDir = vscode.Uri.parse(path.join(this.context.extensionPath, 'src', 'service', this.serviceDirName));
     this.targetServiceDir = vscode.Uri.joinPath( this.workspaceFoldersUri, 'node_modules', this.nodeModuleDirName, this.serviceDirName);
   }
