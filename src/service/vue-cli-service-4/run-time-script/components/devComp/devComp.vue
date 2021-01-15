@@ -7,44 +7,68 @@
 
       </div>
       <div class="field_content">
-        <h4>props: </h4>
-        <dataField
-          v-for="(prop) in vmProps"
-          :key="prop.key"
-          ref="dataField"
-          type="props"
-          :prop="prop"
-          @addRef="addRef"
-          @currentEditingFieldChange="currentEditingFieldChange"
-          @saveValue="saveValue"/>
-        <h4>data: </h4>
-        <dataField
-          v-for="(prop) in vmDatas"
-          :key="prop.key"
-          ref="dataField"
-          :prop="prop"
-          type="data"
-          @addRef="addRef"
-          @currentEditingFieldChange="currentEditingFieldChange"
-          @saveValue="saveValue"/>
-        <h4>setupState: </h4>
-        <dataField
-          v-for="(prop) in vmSetupState"
-          :key="prop.key"
-          ref="dataField"
-          :prop="prop"
-          type="setupState"
-          @addRef="addRef"
-          @currentEditingFieldChange="currentEditingFieldChange"
-          @saveValue="saveValue"/>
-          <h4>run methods: </h4>
-          <runFunctionField
+        <fieldContainer>
+          <template v-slot:title>
+            props:
+          </template>
+          <template v-slot:content>
+            <dataField
+              v-for="(prop) in vmProps"
+              :key="prop.key"
+              ref="dataField"
+              type="props"
+              :prop="prop"
+              @addRef="addRef"
+              @currentEditingFieldChange="currentEditingFieldChange"
+              @saveValue="saveValue"/>
+          </template>
+        </fieldContainer>
+        <fieldContainer>
+          <template v-slot:title>
+            data: 
+          </template>
+          <template v-slot:content>
+            <dataField
+              v-for="(prop) in vmDatas"
+              :key="prop.key"
+              ref="dataField"
+              :prop="prop"
+              type="data"
+              @addRef="addRef"
+              @currentEditingFieldChange="currentEditingFieldChange"
+              @saveValue="saveValue"/>
+          </template>
+        </fieldContainer>
+        <fieldContainer>
+          <template v-slot:title>
+            setupState: 
+          </template>
+          <template v-slot:content>
+            <dataField
+              v-for="(prop) in vmSetupState"
+              :key="prop.key"
+              ref="dataField"
+              :prop="prop"
+              type="setupState"
+              @addRef="addRef"
+              @currentEditingFieldChange="currentEditingFieldChange"
+              @saveValue="saveValue"/>
+          </template>
+        </fieldContainer>
+        <fieldContainer>
+          <template v-slot:title>
+            run methods: 
+          </template>
+          <template v-slot:content>
+            <runFunctionField
             v-for="(prop) in vmFunctions"
             :key="prop.key"
             :method="prop"
             @runFunction="runFunction"/>
-        </div>
+          </template>
+        </fieldContainer>
       </div>
+    </div>
   </div>
 </template>
 
@@ -52,6 +76,7 @@
 import { processState, processProps, processSetupState, processFunction } from './process'
 import dataField from './fieldComps/dataField.vue'
 import runFunctionField from './fieldComps/runFunctionField.vue'
+import fieldContainer from './fieldComps/fieldContainer.vue'
 import config from '../../config.js'
 import getBigVersion from '../../loaders/utils/getBigVersion.js'
 const vueBigVersion = getBigVersion(config.vueVersion)
@@ -60,6 +85,7 @@ export default {
   components: {
     dataField,
     runFunctionField,
+    fieldContainer,
   },
   data() {
     return {
@@ -187,5 +213,6 @@ export default {
   height: 30vh;
   overflow: scroll;
   background-color: white;
+  padding: 10px;
 }
 </style>
