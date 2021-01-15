@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="runFunctionBox">
     <img @click="runFunction" src="../img/run.png" alt="" class="icon">
-    <span>{{method.key}}</span>
+    <span class="key">{{method.key}}</span>
     <input
       :class="{
         prop_input: true,
@@ -61,6 +61,12 @@ export default {
 </script>
 
 <style scoped>
+.runFunctionBox {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 16px;
+}
 .icon {
   height: 20px;
   cursor: pointer;
@@ -72,5 +78,9 @@ export default {
 }
 .prop_input.error_input {
   -webkit-box-shadow: 0 0 0px 1000px #ee9595  inset !important;
+}
+.key {
+  margin: 0px 8px;
+  color: aqua;
 }
 </style>

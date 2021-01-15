@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <header class="header">
-      <img @click="isShow = !isShow" src="../img/arrow-right.png" alt="" :class="{icon: true, isShow: isShow}">
+    <header class="header" @click="isShow = !isShow">
+      <img src="../img/arrow-right.png" alt="" :class="{icon: true, isShow: isShow}">
       <h4>
         <slot name="title"></slot>
       </h4>
@@ -39,9 +39,10 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  cursor: pointer;
 }
 .icon {
-  height: 20px;
+  height: 15px;
   cursor: pointer;
   margin-left: 5px;
   margin-right: 5px;
@@ -56,5 +57,8 @@ export default {
 }
 .icon.isShow {
   transform: rotate(90deg)
+}
+.content_inner {
+  margin-left: 20px;
 }
 </style>
