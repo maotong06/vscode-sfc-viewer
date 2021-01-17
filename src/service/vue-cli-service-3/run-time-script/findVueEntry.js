@@ -12,7 +12,12 @@ if (config.isTs) {
 
 module.exports = function (mainjsEntryPath) {
   let jsEntryAbsolutePath = mainjsEntryPath.startsWith('/') ? mainjsEntryPath : path.join(process.cwd(), mainjsEntryPath)
-  let source = fs.readFileSync(jsEntryAbsolutePath).toString('utf-8')
+  let source
+  try {
+    source = fs.readFileSync(jsEntryAbsolutePath).toString('utf-8')
+  } catch (error) {
+    return []
+  }
   if (config.isTs) {
     return findMainTsVueEntry(source)
   } else {
@@ -31,6 +36,8 @@ function findMainJsVueEntrys(source) {
     if (ast.type === 'ImportDeclaration') {
       if (ast.source.value.endsWith('.vue')) {
         vueEntrys.push(ast.source.value)
+      } else {
+        vueEntrys.push(ast.source.value + '.vue')
       }
     } else if (ast.type === 'VariableDeclaration') {
       ast.declarations.forEach(declaration => {
@@ -39,6 +46,8 @@ function findMainJsVueEntrys(source) {
             let value = get(declaration, ['init', 'arguments', 0, 'value'], '')
             if (get(declaration, ['init', 'arguments', 0, 'type']) === 'StringLiteral' && value.endsWith('.vue')) {
               vueEntrys.push(value)
+            } else {
+              vueEntrys.push(value + '.vue')
             }
           }
         }
@@ -61,14 +70,19 @@ function findMainTsVueEntry(source) {
     if (ast.kind === ts.SyntaxKind.ImportDeclaration) {
       if (ast.moduleSpecifier.text.endsWith('.vue')) {
         vueEntrys.push(ast.moduleSpecifier.text)
+      } else {
+        vueEntrys.push(ast.moduleSpecifier.text + '.vue')
       }
     } else if (ast.kind === ts.SyntaxKind.VariableStatement) {
       ast.declarationList.declarations.forEach(declaration => {
         if (get(declaration, ['initializer', 'kind']) === ts.SyntaxKind.CallExpression &&
-        get(declaration, ['initializer', 'expression', 'escapedText']) === 'require' &&
-        get(declaration, ['initializer', 'arguments', 0, 'text']).endsWith('.vue')
+        get(declaration, ['initializer', 'expression', 'escapedText']) === 'require'
           ) {
-          vueEntrys.push(get(declaration, ['initializer', 'arguments', 0, 'text']))
+          if (get(declaration, ['initializer', 'arguments', 0, 'text']).endsWith('.vue')) {
+            vueEntrys.push(get(declaration, ['initializer', 'arguments', 0, 'text']))
+          } else {
+            vueEntrys.push(get(declaration, ['initializer', 'arguments', 0, 'text']) + '.vue')
+          }
         }
       })
     }
