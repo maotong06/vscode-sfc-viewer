@@ -12,6 +12,7 @@ const defaultsDeep = require('lodash.defaultsdeep')
 const { warn, error, isPlugin, loadModule } = require('@vue/cli-shared-utils')
 
 const { defaults, validate } = require('./options')
+const findVueEntry = require('../run-time-script/findVueEntry.js')
 
 module.exports = class Service {
   constructor (context, { plugins, pkg, inlineOptions, useBuiltIn } = {}) {
@@ -247,6 +248,48 @@ module.exports = class Service {
       }
     })
 
+    if (
+      !process.env.VUE_CLI_ENTRY_FILES &&
+      typeof config.entry !== 'function'
+    ) {
+      let entryFiles
+      if (typeof config.entry === 'string') {
+        entryFiles = [config.entry]
+      } else if (Array.isArray(config.entry)) {
+        entryFiles = config.entry
+      } else {
+        entryFiles = Object.values(config.entry || []).reduce((allEntries, curr) => {
+          return allEntries.concat(curr)
+        }, [])
+      }
+
+      entryFiles = entryFiles.map(file => path.resolve(this.context, file))
+      process.env.VUE_CLI_ENTRY_FILES = JSON.stringify(entryFiles)
+    }
+
+    let entryFileArr = []
+    for (const key in config.entry) {
+      if (Object.hasOwnProperty.call(config.entry, key)) {
+        const iterator = config.entry[key];
+        entryFileArr = entryFileArr.concat(iterator)
+      }
+    }
+    let vueEntrys = []
+    entryFileArr.forEach(e => {
+      vueEntrys = vueEntrys.concat(findVueEntry(e))
+    })
+    let rules = [
+      {
+        test: genRegbyStringArr(vueEntrys),
+        loader: require.resolve('../run-time-script/loaders/vueLoader.js')
+      },
+      {
+        test: genRegbyStringArr(entryFileArr),
+        loader: require.resolve('../run-time-script/loaders/mainJSLoader.js')
+      }
+    ]
+    config.module.rules = config.module.rules.concat(rules)
+
     // #2206 If config is merged by merge-webpack, it discards the __ruleNames
     // information injected by webpack-chain. Restore the info so that
     // vue inspect works properly.
@@ -419,4 +462,11 @@ function cloneRuleNames (to, from) {
       cloneRuleNames(to[i].oneOf, r.oneOf)
     }
   })
+}
+
+function genRegbyStringArr(arr) {
+  let newArr = arr.map(p => {
+    return `(${p.replace(/^\W+/, '').replace(/\./g, `\\.`)}$)`
+  })
+  return new RegExp(newArr.join('|'))
 }

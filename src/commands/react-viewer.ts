@@ -8,7 +8,7 @@ import { getPackageVersion } from '../utils/getPackageVersion';
 
 
 export class ReactViewer extends SuperViewer {
-  protected serviceDirName = 'react-scripts-4'
+  protected serviceDirName = { '4': 'react-scripts-4' }
   protected nodeModuleDirName = 'react-scripts'
   protected matchLanguageIds = ['jsx', 'javascriptreact', 'typescriptreact']
 
@@ -30,14 +30,13 @@ export class ReactViewer extends SuperViewer {
     const originConfigFileUrl = vscode.Uri.joinPath(this.targetServiceDir, 'run-time-script', 'config')
     const targetConfigFileUrl = vscode.Uri.joinPath(this.targetServiceDir, 'run-time-script', 'config.js')
     const devComponentPath = vscode.Uri.joinPath(this.targetServiceDir, 'run-time-script', 'components', 'devComp', 'devComp.vue').fsPath
-    const targetPackageJson = JSON.parse((await vscode.workspace.fs.readFile(vscode.Uri.joinPath(this.workspaceFoldersUri, 'package.json'))).toString())
-    console.log('targetPackageJson', targetPackageJson)
+    console.log('targetPackageJson', this.targetPackageJson)
     let originConfigStr = await (await vscode.workspace.fs.readFile(originConfigFileUrl)).toString()
     const configContent = Buffer.from(
       templateRender(originConfigStr, {
         sfcFileFsPath: this.sfcFileFsPath,
         devComponentPath,
-        isTs: getPackageVersion(targetPackageJson, 'typescript') ? 'true' : 'false'
+        isTs: getPackageVersion(this.targetPackageJson, 'typescript') ? 'true' : 'false'
       })
       , 'utf8') 
     console.log(configContent)

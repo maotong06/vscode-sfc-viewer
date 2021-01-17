@@ -4,13 +4,15 @@ import { Logger } from '../Logger';
 import * as cp from 'child_process';
 import * as vscode from 'vscode';
 import * as path from 'path'
+import { getBigVersion, getPackageVersion } from '../utils/getPackageVersion';
 
 export abstract class SuperViewer {
   protected abstract matchLanguageIds: string[]
-  protected abstract serviceDirName: string
+  protected abstract serviceDirName: { [k: string]: string }
   protected abstract nodeModuleDirName: string
   protected child = {} as cp.ChildProcess
   protected sfcFileFsPath: string = ''
+  protected targetPackageJson: any = {}
   protected context: vscode.ExtensionContext
   protected originServiceDir: vscode.Uri = {} as vscode.Uri
   protected targetServiceDir: vscode.Uri = {} as vscode.Uri
@@ -65,7 +67,7 @@ export abstract class SuperViewer {
     });
   }
 
-  protected initWorkspaceUri(fileUri: vscode.Uri) {
+  protected async initWorkspaceUri(fileUri: vscode.Uri) {
     if (!(vscode.workspace && vscode.workspace.workspaceFolders)) {
       vscode.window.showInformationMessage('Workspace not opened')
       throw new Error()
@@ -88,7 +90,14 @@ export abstract class SuperViewer {
       vscode.window.showInformationMessage('not find the Workspace')
       throw new Error('未找到对用工作区')
     }
-    this.originServiceDir = vscode.Uri.parse(path.join(this.context.extensionPath, 'src', 'service', this.serviceDirName));
-    this.targetServiceDir = vscode.Uri.joinPath( this.workspaceFoldersUri, 'node_modules', this.nodeModuleDirName, this.serviceDirName);
+    
+    this.targetPackageJson = JSON.parse((await vscode.workspace.fs.readFile(vscode.Uri.joinPath(this.workspaceFoldersUri, 'package.json'))).toString())
+    const version = getBigVersion(getPackageVersion(this.targetPackageJson, this.nodeModuleDirName))
+    if (!version) {
+      vscode.window.showInformationMessage('node find the devDependencies :' + this.nodeModuleDirName)
+      throw new Error('')
+    }
+    this.originServiceDir = vscode.Uri.parse(path.join(this.context.extensionPath, 'src', 'service', this.serviceDirName[version]));
+    this.targetServiceDir = vscode.Uri.joinPath( this.workspaceFoldersUri, 'node_modules', this.nodeModuleDirName, this.serviceDirName[version]);
   }
 }

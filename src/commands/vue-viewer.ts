@@ -4,11 +4,11 @@ import * as path from 'path';
 import * as cp from 'child_process';
 import { SuperViewer } from './super-viewer';
 import { templateRender } from '../utils/templateRender';
-import { getPackageVersion } from '../utils/getPackageVersion';
+import { getBigVersion, getPackageVersion } from '../utils/getPackageVersion';
 
 
 export class VueViewer extends SuperViewer {
-  protected serviceDirName = 'vue-cli-service-4'
+  protected serviceDirName = {'4': 'vue-cli-service-4', '3': 'vue-cli-service-3'}
   protected nodeModuleDirName = '@vue/cli-service'
   protected matchLanguageIds = ['vue']
 
@@ -29,15 +29,14 @@ export class VueViewer extends SuperViewer {
     const originConfigFileUrl = vscode.Uri.joinPath(this.targetServiceDir, 'run-time-script', 'config')
     const targetConfigFileUrl = vscode.Uri.joinPath(this.targetServiceDir, 'run-time-script', 'config.js')
     const devComponentPath = vscode.Uri.joinPath(this.targetServiceDir, 'run-time-script', 'components', 'devComp', 'devComp.vue').fsPath
-    const targetPackageJson = JSON.parse((await vscode.workspace.fs.readFile(vscode.Uri.joinPath(this.workspaceFoldersUri, 'package.json'))).toString())
     // console.log('targetPackageJson', targetPackageJson)
     let originConfigStr = await (await vscode.workspace.fs.readFile(originConfigFileUrl)).toString()
     const configContent = Buffer.from(
       templateRender(originConfigStr, {
         sfcFileFsPath: this.sfcFileFsPath,
         devComponentPath,
-        vueVersion: getPackageVersion(targetPackageJson, 'vue'),
-        isTs: getPackageVersion(targetPackageJson, 'typescript') ? 'true': 'false'})
+        vueVersion: getPackageVersion(this.targetPackageJson, 'vue'),
+        isTs: getPackageVersion(this.targetPackageJson, 'typescript') ? 'true': 'false'})
       , 'utf8') 
     // console.log(configContent)
     await vscode.workspace.fs.writeFile(targetConfigFileUrl, configContent);

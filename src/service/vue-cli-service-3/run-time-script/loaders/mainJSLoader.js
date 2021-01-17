@@ -1,5 +1,4 @@
 // 修改 main.js 入口文件，注册目标vue sfc组件
-const get = require('../get.js')
 const config = require('../config.js')
 const getBigVersion = require('./utils/getBigVersion.js')
 const vue2mainJs = require('./utils/vue2mainJs.js')

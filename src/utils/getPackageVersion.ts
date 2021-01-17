@@ -7,3 +7,10 @@ export function getPackageVersion(packageJson: any, name: string): string {
     return ''
   }
 }
+
+export function getBigVersion (version: string) {
+  const res = version.match(/\d/)
+  if (res) {
+    return res[0]
+  }
+}
