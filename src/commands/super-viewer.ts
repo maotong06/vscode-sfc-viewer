@@ -28,7 +28,7 @@ export abstract class SuperViewer {
     StatusbarUi.changeOpening(false)
     if (this.child.kill) {
       this.child.send({ code: 'close' })
-      this.child.kill()
+      this.child.kill('SIGKILL')
       Logger.log('已关闭进程')
     }
   }
@@ -37,14 +37,26 @@ export abstract class SuperViewer {
     this.closeViewer()
     console.log('Config.getRunArgs()', Config.getRunArgs())
     StatusbarUi.changeOpening(true)
-    this.child = cp.fork(
-      moudulePath,
-      execArgs.concat(Config.getRunArgs()),
-      {
-        cwd: this.workspaceFoldersUri.fsPath,
-        silent: true
-      },
-    );
+    if (getPackageVersion(this.targetPackageJson, 'node-sass')) {
+      // node-sass 兼容问题 临时处理方案
+      this.child = cp.spawn(
+        'node',
+        [moudulePath, ...execArgs.concat(Config.getRunArgs())],
+        {
+          cwd: this.workspaceFoldersUri.fsPath,
+          detached: false,
+        },
+      );
+    } else {
+      this.child = cp.fork(
+        moudulePath,
+        execArgs.concat(Config.getRunArgs()),
+        {
+          cwd: this.workspaceFoldersUri.fsPath,
+          silent: true
+        },
+      );
+    }
     this.child.on('message', (msg) => {
       Logger.log(msg)
     })
