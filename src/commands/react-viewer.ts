@@ -10,7 +10,7 @@ import { getPackageVersion } from '../utils/getPackageVersion';
 export class ReactViewer extends SuperViewer {
   protected serviceDirName = { '4': 'react-scripts-4' }
   protected nodeModuleDirName = 'react-scripts'
-  protected matchLanguageIds = ['jsx', 'javascriptreact', 'typescriptreact']
+  public static matchLanguageIds = ['jsx', 'javascriptreact', 'typescriptreact']
 
   public constructor(context: vscode.ExtensionContext) {
     super(context)

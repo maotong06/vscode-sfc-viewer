@@ -8,51 +8,47 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as cp from 'child_process';
 import * as cmd from './const/commends';
-import { onDidOpenTextDocument } from './EventListeners';
-let vueViewer: VueViewer
-let reactViewer: ReactViewer
+import { statusbarUiShow } from './EventListeners';
+import { getUriAndLanguageId } from './utils/checkWorkspaceFile';
+let viewers = [ReactViewer, VueViewer]
+let viewerInsitents: ReactViewer | VueViewer
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	vueViewer = new VueViewer(context)
-	reactViewer = new ReactViewer(context)
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "vscode-sfc-viewer" is now active!');
 
 	context.subscriptions.push(vscode.commands.registerCommand(
-		cmd.VUE_OPEN,
+		cmd.SFC_OPEN,
 		async (fileUri) => {
-			Logger.show()
-			vueViewer.openViewer(fileUri)
+			const matchLanguageIds = viewers.reduce((preVal, currentVal) => {
+				return preVal.concat(currentVal.matchLanguageIds)
+			}, [] as string[])
+			const { uri, languageId } = await getUriAndLanguageId(matchLanguageIds, fileUri)
+
+			for (const viewer of viewers) {
+				if (viewer.matchLanguageIds.includes(languageId)) {
+					viewerInsitents = new viewer(context)
+					Logger.show()
+					viewerInsitents.openViewer(uri)
+					return
+				}
+			}
 		}
 	));
 	context.subscriptions.push(vscode.commands.registerCommand(
-		cmd.VUE_CLOSE,
+		cmd.SFC_CLOSE,
 		() => {
-			vueViewer.closeViewer()
+			viewerInsitents.closeViewer()
 		}
 	));
-	context.subscriptions.push(vscode.commands.registerCommand(
-		cmd.REACT_OPEN,
-		async (fileUri) => {
-			Logger.show()
-			reactViewer.openViewer(fileUri)
-		}
-	));
-	context.subscriptions.push(vscode.commands.registerCommand(
-		cmd.REACT_CLOSE,
-		() => {
-			reactViewer.closeViewer()
-		}
-	));
-	context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(onDidOpenTextDocument))
+	context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(statusbarUiShow))
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {
-	vueViewer.closeViewer()
-	reactViewer.closeViewer()
+	viewerInsitents.closeViewer()
 }

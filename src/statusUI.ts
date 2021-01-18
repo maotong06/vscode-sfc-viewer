@@ -43,14 +43,10 @@ export class StatusbarUi {
     if (window.activeTextEditor?.document.languageId) {
       switch (window.activeTextEditor?.document.languageId) {
         case 'vue':
-          StatusbarUi._closeCmd = cmd.VUE_CLOSE
-          StatusbarUi._openCmd = cmd.VUE_OPEN
-          StatusbarUi.setOpenShowSfc()
-          break;
         case 'javascriptreact':
         case 'typescriptreact':
-          StatusbarUi._closeCmd = cmd.REACT_CLOSE
-          StatusbarUi._openCmd = cmd.REACT_OPEN
+          StatusbarUi._closeCmd = cmd.SFC_CLOSE
+          StatusbarUi._openCmd = cmd.SFC_OPEN
           StatusbarUi.setOpenShowSfc()
           break;
         default:

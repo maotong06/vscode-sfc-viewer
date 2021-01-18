@@ -7,7 +7,7 @@ import * as path from 'path'
 import { getBigVersion, getPackageVersion } from '../utils/getPackageVersion';
 
 export abstract class SuperViewer {
-  protected abstract matchLanguageIds: string[]
+  public static matchLanguageIds: string[]
   protected abstract serviceDirName: { [k: string]: string }
   protected abstract nodeModuleDirName: string
   protected child = {} as cp.ChildProcess
@@ -80,22 +80,14 @@ export abstract class SuperViewer {
   }
 
   protected async initWorkspaceUri(fileUri: vscode.Uri) {
-    if (!(vscode.workspace && vscode.workspace.workspaceFolders)) {
-      vscode.window.showInformationMessage('Workspace not opened')
+    if (!vscode.workspace.workspaceFolders) {
       throw new Error()
     }
-    if (fileUri) {
-      this.sfcFileFsPath = fileUri.fsPath
-    } else if (vscode.window.activeTextEditor?.document.languageId && this.matchLanguageIds.includes(vscode.window.activeTextEditor?.document.languageId)) {
-      this.sfcFileFsPath = vscode.window.activeTextEditor?.document.fileName
-    } else {
-      vscode.window.showInformationMessage('The specified file is not currently open')
-      throw new Error()
-    }
-    arguments
+    this.sfcFileFsPath = fileUri.fsPath
     const works = vscode.workspace.workspaceFolders.find(w => {
       return this.sfcFileFsPath.includes(w.uri.fsPath)
     })
+    
     if (works && works.uri) {
       this.workspaceFoldersUri = works.uri
     } else {
