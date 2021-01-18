@@ -29,6 +29,20 @@
 				"title": "Kill sfc"
 			}
 		],
+		"keybindings": [
+      {
+        "command": "extension.vscode-sfc-viewer.openSfcViewer",
+        "key": "alt+K alt+F",
+        "when": "resourceLangId == vue || resourceLangId == javascriptreact || resourceLangId == typescriptreact",
+        "mac": "cmd+K cmd+F"
+      },
+      {
+				"command": "extension.vscode-sfc-viewer.killSfcViewer",
+				"when": "resourceLangId == vue || resourceLangId == javascriptreact || resourceLangId == typescriptreact",
+        "key": "alt+K alt+P",
+        "mac": "cmd+K cmd+P"
+      }
+    ],
 		"menus": {
       "editor/context": [
         {
