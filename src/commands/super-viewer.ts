@@ -101,7 +101,9 @@ export abstract class SuperViewer {
       vscode.window.showInformationMessage('node find the devDependencies :' + this.nodeModuleDirName)
       throw new Error('')
     }
-    this.originServiceDir = vscode.Uri.parse(path.join(this.context.extensionPath, 'src', 'service', this.serviceDirName[version]));
+    this.originServiceDir = vscode.Uri.parse(path.join(this.context.extensionPath, 'service', this.serviceDirName[version]));
     this.targetServiceDir = vscode.Uri.joinPath( this.workspaceFoldersUri, 'node_modules', this.nodeModuleDirName, this.serviceDirName[version]);
+    Logger.log('this.originServiceDir' + this.originServiceDir)
+    Logger.log('this.targetServiceDir' + this.targetServiceDir)
   }
 }

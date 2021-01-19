@@ -16,15 +16,21 @@ export class VueViewer extends SuperViewer {
     super(context)
   }
   public async openViewer(fileUri: vscode.Uri) {
-    await this.initWorkspaceUri(fileUri)
-    await this.writeFiles()
-    this.runProcess(path.join(this.targetServiceDir.fsPath, 'bin', 'vue-cli-service.js'), ['serve', '--open'])
+    try {
+      await this.initWorkspaceUri(fileUri)
+      await this.writeFiles()
+      Logger.log('writeFile success')
+      this.runProcess(path.join(this.targetServiceDir.fsPath, 'bin', 'vue-cli-service.js'), ['serve', '--open'])
+    } catch (error) {
+      Logger.log(error)
+    }
   }
 
   private async writeFiles() {
     // 复制启动文件
+    Logger.log('WRITE FILE' + vscode.workspace.fs.copy)
     await vscode.workspace.fs.copy(this.originServiceDir, this.targetServiceDir, { overwrite: true })
-  
+    Logger.log('copy success')
     // 写入config.js
     const originConfigFileUrl = vscode.Uri.joinPath(this.targetServiceDir, 'run-time-script', 'config')
     const targetConfigFileUrl = vscode.Uri.joinPath(this.targetServiceDir, 'run-time-script', 'config.js')
@@ -40,5 +46,6 @@ export class VueViewer extends SuperViewer {
       , 'utf8') 
     // console.log(configContent)
     await vscode.workspace.fs.writeFile(targetConfigFileUrl, configContent);
+    
   }
 }
