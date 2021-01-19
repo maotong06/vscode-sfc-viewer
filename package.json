@@ -2,14 +2,14 @@
   "name": "vscode-sfc-viewer",
 	"displayName": "vscode-sfc-viewer",
 	"description": "Launch a development local Server with your sfc file",
-	"version": "0.0.1",
+	"version": "1.0.1",
 	"publisher": "limaotong",
   "author": {
     "name": "limaotong",
     "email": "maotong06@qq.com"
   },
 	"engines": {
-		"vscode": "^1.52.0"
+		"vscode": "^1.20.0"
 	},
 	"categories": [
 		"Other"
@@ -70,6 +70,8 @@
 			}
 		}
 	},
+	"license": "MIT",
+	"icon": "images/icon.png",
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
 		"compile": "tsc -p ./",
