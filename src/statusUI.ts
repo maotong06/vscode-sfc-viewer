@@ -4,8 +4,8 @@ import * as cmd from './const/commends'
 export class StatusbarUi {
   private static _statusBarItem: StatusBarItem;
   private static _isOpening: boolean = false
-  private static _closeCmd: string = ''
-  private static _openCmd: string = ''
+  private static _closeCmd: string = cmd.SFC_CLOSE
+  private static _openCmd: string = cmd.SFC_OPEN
 
   private static get statusbar() {
     if (!StatusbarUi._statusBarItem) {
@@ -45,8 +45,8 @@ export class StatusbarUi {
         case 'vue':
         case 'javascriptreact':
         case 'typescriptreact':
-          StatusbarUi._closeCmd = cmd.SFC_CLOSE
-          StatusbarUi._openCmd = cmd.SFC_OPEN
+          // StatusbarUi._closeCmd = cmd.SFC_CLOSE
+          // StatusbarUi._openCmd = cmd.SFC_OPEN
           StatusbarUi.setOpenShowSfc()
           break;
         default:
