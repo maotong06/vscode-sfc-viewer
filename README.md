@@ -11,9 +11,9 @@ keybindings:
 `alt+K alt+F` or `cmd+K cmd+F`: open the sfc file
 `alt+K alt+P` or `cmd+K cmd+P`: close the sfc server
 
-![Open React](./images/Screenshot/open_react.gif)
+![Open React](https://vps-1253210315.cos.ap-shanghai.myqcloud.com/videoedit/qimeng/49cuxiao/202001113/open_react.gif)
 
-![Open Vue](./images/Screenshot/open_vue.gif)
+![Open Vue](https://vps-1253210315.cos.ap-shanghai.myqcloud.com/videoedit/qimeng/49cuxiao/202001113/open_vue.gif)
 
 ## Requirements
 
@@ -35,4 +35,4 @@ Complete the startup of the vue react project components
 
 -----------------------------------------------------------------------------------------------------------
 ## LICENSE
-This extension is licensed under the [MIT License](LICENSE)
+This extension is licensed under the MIT License
