@@ -2,7 +2,7 @@
   "name": "vscode-sfc-viewer",
 	"displayName": "sfc viewer",
 	"description": "VUE,REACT sfc view in browser",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"publisher": "limaotong",
   "author": {
     "name": "limaotong",
