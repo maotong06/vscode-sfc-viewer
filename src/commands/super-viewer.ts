@@ -103,7 +103,5 @@ export abstract class SuperViewer {
     }
     this.originServiceDir = vscode.Uri.parse(path.join(this.context.extensionPath, 'service', this.serviceDirName[version]));
     this.targetServiceDir = vscode.Uri.joinPath( this.workspaceFoldersUri, 'node_modules', this.nodeModuleDirName, this.serviceDirName[version]);
-    Logger.log('this.originServiceDir' + this.originServiceDir)
-    Logger.log('this.targetServiceDir' + this.targetServiceDir)
   }
 }
