@@ -1,13 +1,13 @@
 {
-  "name": "vscode-sfc-viewer",
+	"name": "vscode-sfc-viewer",
 	"displayName": "sfc viewer",
 	"description": "VUE,REACT sfc view in browser",
 	"version": "1.0.5",
 	"publisher": "limaotong",
-  "author": {
-    "name": "limaotong",
-    "email": "maotong06@qq.com"
-  },
+	"author": {
+		"name": "limaotong",
+		"email": "maotong06@qq.com"
+	},
 	"engines": {
 		"vscode": "^1.52.0"
 	},
@@ -30,42 +30,42 @@
 			}
 		],
 		"keybindings": [
-      {
-        "command": "extension.vscode-sfc-viewer.openSfcViewer",
-        "key": "alt+K alt+F",
-        "when": "resourceLangId == vue || resourceLangId == javascriptreact || resourceLangId == typescriptreact",
-        "mac": "cmd+K cmd+F"
-      },
-      {
+			{
+				"command": "extension.vscode-sfc-viewer.openSfcViewer",
+				"key": "alt+K alt+F",
+				"when": "resourceLangId == vue || resourceLangId == javascriptreact || resourceLangId == typescriptreact",
+				"mac": "cmd+K cmd+F"
+			},
+			{
 				"command": "extension.vscode-sfc-viewer.killSfcViewer",
 				"when": "resourceLangId == vue || resourceLangId == javascriptreact || resourceLangId == typescriptreact",
-        "key": "alt+K alt+P",
-        "mac": "cmd+K cmd+P"
-      }
-    ],
+				"key": "alt+K alt+P",
+				"mac": "cmd+K cmd+P"
+			}
+		],
 		"menus": {
-      "editor/context": [
-        {
-          "command": "extension.vscode-sfc-viewer.openSfcViewer",
-          "group": "2_workspace@openSfcViewer",
-          "when": "resourceLangId == vue || resourceLangId == javascriptreact || resourceLangId == typescriptreact"
-        }
-      ],
-      "explorer/context": [
-        {
-          "command": "extension.vscode-sfc-viewer.openSfcViewer",
-          "group": "2_workspace@sfcViewerExplorer",
-          "when": "resourceLangId == javascriptreact || resourceLangId == typescriptreact || resourceLangId == vue"
-        }
-      ]
+			"editor/context": [
+				{
+					"command": "extension.vscode-sfc-viewer.openSfcViewer",
+					"group": "2_workspace@openSfcViewer",
+					"when": "resourceLangId == vue || resourceLangId == javascriptreact || resourceLangId == typescriptreact"
+				}
+			],
+			"explorer/context": [
+				{
+					"command": "extension.vscode-sfc-viewer.openSfcViewer",
+					"group": "2_workspace@sfcViewerExplorer",
+					"when": "resourceLangId == javascriptreact || resourceLangId == typescriptreact || resourceLangId == vue"
+				}
+			]
 		},
 		"configuration": {
-      "title": "SFCViewer",
-      "properties": {
+			"title": "SFCViewer",
+			"properties": {
 				"SFCViewer.setting.runArgs": {
 					"type": "array",
-          "default": [],
-          "description": "Set your project running arg on starts, like ['--mode', 'development']  in vue cli after 'npm run serve', "
+					"default": [],
+					"description": "Set your project running arg on starts, like ['--mode', 'development']  in vue cli after 'npm run serve', "
 				}
 			}
 		}
@@ -81,20 +81,22 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.52.0",
 		"@types/glob": "^7.1.3",
 		"@types/mocha": "^8.0.4",
 		"@types/node": "^12.11.7",
-		"eslint": "^7.15.0",
+		"@types/vscode": "^1.52.0",
 		"@typescript-eslint/eslint-plugin": "^4.9.0",
 		"@typescript-eslint/parser": "^4.9.0",
+		"eslint": "^7.15.0",
 		"glob": "^7.1.6",
 		"mocha": "^8.1.3",
 		"typescript": "^4.1.2",
+		"vsce": "^1.84.0",
 		"vscode-test": "^1.4.1"
 	},
 	"repository": {
-    "type": "git",
-    "url": "https://github.com/maotong06/vscode-sfc-viewer.git"
-  }
+		"deploy": "vsce publish --yarn",
+		"type": "git",
+		"url": "https://github.com/maotong06/vscode-sfc-viewer.git"
+	}
 }
