@@ -73,6 +73,7 @@
 	"license": "MIT",
 	"icon": "images/icon.png",
 	"scripts": {
+		"deploy": "vsce publish --yarn",
 		"vscode:prepublish": "yarn run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
@@ -95,7 +96,6 @@
 		"vscode-test": "^1.4.1"
 	},
 	"repository": {
-		"deploy": "vsce publish --yarn",
 		"type": "git",
 		"url": "https://github.com/maotong06/vscode-sfc-viewer.git"
 	}
