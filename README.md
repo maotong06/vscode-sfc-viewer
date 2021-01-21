@@ -35,6 +35,12 @@ It will modify your webpack configuration so that the home page opens to the cor
 * Q: Can it automatically complete authentication or automatically skip authentication？
 * A: No, it will not automatically complete the authentication. If there is authentication on your program or routing hook, it will not automatically skip, and it will still retain this authentication. You need to pay attention to this.
 
+* Q: Why can't my sfc program start
+* A: Because the version of @vue/cli-server or react-scirpts that this plug-in depends on is strongly related, if your project was created too long ago, it may not start. But the error message should be displayed on the output panel, please tell me the detailed information so that I can deal with it
+
+* Q: About webpack multi-entry project
+* A: It will start the project normally, but you need to manually enter one of the entries in the browser to see the sfc component. For example: http://localhost:8080/some.html
+
 ## Release Notes
 
 ### 1.0.1
