@@ -32,6 +32,9 @@ It will modify your webpack configuration so that the home page opens to the cor
 ## Known Issues
 * Tip: If there is node-sass in the project, there may be incompatibility, because node-sass will detect the node version, and the node in vscode is not in the compatibility list.
 
+* Q: Can it automatically complete authentication or automatically skip authentication？
+* A: No, it will not automatically complete the authentication. If there is authentication on your program or routing hook, it will not automatically skip, and it will still retain this authentication. You need to pay attention to this.
+
 ## Release Notes
 
 ### 1.0.1
