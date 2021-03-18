@@ -15,6 +15,8 @@ In .vue, .jsx, .tsx, right click and select View sfc, this will start a server, 
 `alt+K alt+F` or `cmd+K cmd+F`: open the sfc file
 `alt+K alt+P` or `cmd+K cmd+P`: close the sfc server
 
+https://vps-1253210315.cos.ap-shanghai.myqcloud.com/videoedit/qimeng/49cuxiao/202001113/open_react.gif
+https://vps-1253210315.cos.ap-shanghai.myqcloud.com/videoedit/qimeng/49cuxiao/202001113/open_vue.gif
 ![Open React](https://vps-1253210315.cos.ap-shanghai.myqcloud.com/videoedit/qimeng/49cuxiao/202001113/open_react.gif)
 
 ![Open Vue](https://vps-1253210315.cos.ap-shanghai.myqcloud.com/videoedit/qimeng/49cuxiao/202001113/open_vue.gif)
